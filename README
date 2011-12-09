@@ -1,0 +1,205 @@
+Erlang Computer Systems Management CONSole (or ECSMCons)
+Version 1.0
+
+ECSMCons is an Erlang based client/server computer systems 
+management console in which a web browser (with websockets
+support) is used to manage computer systems.
+
+Features:
+
+Server
+
+Operations that can be performed on the client from the server:
+
+Reboot, shutdown, restart or stop erlang service, ping, wake-on-lan,
+when Faronics Deep Freeze is available: freeze, thaw and get status
+copy file to client and run command on client.  When the All command
+check box is selected, then only the checked workstations will have
+that command done on them. Restrict access based on IP address and
+username/password (both configurable in ecsmcons.conf).
+
+Client
+
+The client periodically sends messages to the server to indicate
+whether the system is "Up" and which user is logged in.  It also
+does the command processing sent from the server.
+
+Todo list:
+
+-Get client OS, applications and hardware inventory
+-Create better comments/specs for functions
+-Change config file (ecsmcons.conf) to use records
+
+
+
+Basic setup
+
+Prerequisites:
+1. Erlang (on server and client)
+		http://erlang.org
+2. Misultin
+		https://github.com/ostinelli/misultin
+
+
+Client/Server Setup
+
+1. Server Setup
+   a. erl file setup
+   	  i. ec.hrl file set up as follow:
+
+% server
+-define(SERVER, 'node@host').
+% node name on clients (same for all)
+-define(NODE_NAME, "node@").
+
+% rooms setup
+-define(ROOMS,
+[
+ ["Room1",
+   [{"row1-1", ".sub_domain.org","mac-address"},{"row1-2","sub_somain.org","mac-address"},{"row1-3","sub_somain.org","mac-address"},{"row1-4","sub_somain.org","mac-address"},{"row1-5","sub_somain.org","mac-address"}],
+   [{"row2-1","sub_somain.org","mac-address"},{"row2-2","sub_somain.org","mac-address"},{"row2-3","sub_somain.org","mac-address"},{"row2-4","sub_somain.org","mac-address"},{"row2-5","sub_somain.org","mac-address"}]
+ ],
+ ["Room2",
+   [{"row1-1","sub_somain.org","mac-address"},{"row1-2","sub_somain.org","mac-address"},{"row1-3","sub_somain.org","mac-address"},{"row1-4","sub_somain.org","mac-address"},{"row1-5","sub_somain.org","mac-address"}],
+   [{"row1-1","sub_somain.org","mac-address"},{"row1-2","sub_somain.org","mac-address"},{"row1-3","sub_somain.org","mac-address"},{"row1-4","sub_somain.org","mac-address"},{"row1-5","sub_somain.org","mac-address"}]
+ ],
+]).
+-define(CSS,"/file/system/path/to/ecsmcons/ecsmcons.css").
+-define(JQUERY,"/file/system/path/to/jquery-1.6.4.min.js").
+-define(FAVICON,"/file/system/path/to/ecsmcons/favicon.ico").
+-define(CERTFILE,"/file/system/path/to/cert-file.pem").
+-define(KEYFILE,"/file/system/path/to/key-file.pem").
+-define(UPLOADS,"/file/system/path/to/ecsmcons/uploads/").
+
+	  ii. ecom.hrl setup (for deepfreeze and windows 7)
+
+% domain of clients
+-define(DOMAIN, "my.domain").
+
+% define IP for wol broadcast
+-define(BROADCAST_ADDR, {192,168,0,255}).
+
+% define location of deepfreeze on workstation
+-define(DFC_PATH, "C:/Windows/SysWOW64/dfc.exe").
+
+% define deefreeze command line password
+-define(DFC_PASSWD, "deepfreeze").
+
+% define erl path for client code
+-define(COPY_PATH, "c:/erl/").
+
+% define location of windows users
+-define(USERS_PATH, "c:/users").
+
+% define list of files/folders you don't want to have returned by logged on function
+-define(USERS, ["Public","desktop.ini","Default","Default User","All Users"]).
+
+% define whether server or client - true=server, false=client
+-define(SERVER,	true).
+
+	 iii. create ecsmcons.conf
+
+{""}. % cert password
+{on,[{127,0,0,1}]}. % firewall: on/off, list of IP addresses
+{on,[{"test","test"},{"test2","test2"}]}. % username/password: on/off and username and password
+{60*60}. % cookie max age in seconds
+
+   	  iv. compile ecsmcons.erl and ecom.erl, i.e. erlc ecsmcons.erl and erlc ecom.erl
+
+   b. run these commands from bash shell:
+
+	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -run ecom
+
+	  Then in the erlang vm run:
+
+	  ecsmcons:a().
+
+	  This will start misultin on port 9090
+
+	  use browser to access http://localhost:9090
+	  
+	  or
+
+	  ecsmcons:s().
+
+	  for SSL.  SSL will be attempted if 443 is in the port number.
+
+	  This will start misultin on port 9443
+
+	  use browser to access https://localhost:9443
+
+	  or
+
+	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -run ecom
+
+	  then in the erlang VM shell:
+
+	  application:start(ecsmcons) to run as application
+
+	  application:stop(ecsmcons) to stop application
+
+	  or
+
+	  to run on command-line:
+
+	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -s ec app_start -run ecom
+
+3. Windows setup
+
+   a. copy ecom.beam to something like c:\erl on a windows system (erlang must also be installed on windows system)
+   b. set path to include erlang (location of erl.exe)
+   c. install erlang as a service
+   	  i. per http://www.erlang.org/doc/man/erlsrv.html something like this:
+
+	  erlsrv add "0ecom" -name ecom@host -w "C:/erl" -args "-setcookie my_cookie_string -s ecom"
+
+   e. start service
+   f. set firewall to allow erl.exe to allow traffic from server IP above
+
+---------------------------------------------------------------------------
+
+Versions
+--------
+1.0
+
+-Add monitoring to check if same user logged in to more than one machine
+-Add stop windows service All option
+-Add SERVER ecom.hrl -define option
+-Add FAVICON ecmscons.hrl -define option
+-Add refresh of console every n milli-seconds in ecsmcons.conf
+-Add Thaw/Freeze confirm popups for Deep Freeze options
+-Add numeric shortcut to rooms for easy moving between rooms (1-9 only)
+
+pre 1.0
+
+-Have clients send messages to server for workstation Up and who is logged in
+-Change DOMAIN to BROADCAST_ADDR and use DOMAIN for client domain in ecom.hrl
+-CSS tweaks
+-Add UPLOADS path in ec.conf and ec.erl
+
+-Up/DF visual tweaks
+-Make ec.app
+-Add app_start fun for starting application from command-line
+
+-Change username/password from simple form to jquery and cookies
+-Add logout to main page
+-move some ec.hrl items to ec.conf
+
+-Add IP firewall to console access and switch to turn off/on in ec.hrl
+-Add username/password access to console and switch to turn off/on in ec.hrl
+-Add SSL support
+-Create handler for ec.css in misultin
+
+-Update CSS
+-Fix Add all check box for reboot and shutdown to not prompt individually
+
+-Add copy All
+-Add com dropdown box for each workstation and com all (send command to all workstations)
+-Add check box to workstations and to "All" commands for executing commands on checked systems
+
+-Put rooms in to divs for tabbed access
+
+-Add software update options for Mozilla Firefox and Chrome
+-Change format of Rooms list and update code to process
+-Fix bug in Rooms javascript output
+
