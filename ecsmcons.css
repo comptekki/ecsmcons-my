@@ -1,0 +1,94 @@
+/*
+Copyright (c) 2011, Wes James <comptekki@gmail.com>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of "ECSMCons" nor the names of its contributors may be
+      used to endorse or promote products derived from this software without
+      specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+*/
+
+body {background-color:black; color:yellow;}
+th.oth {font-size:18pt; text-align:center; border:1px solid #555555;}
+table { border-collapse:collapse;}
+input {width:100px;}
+
+#wrapper { width:1665px; margin:0 auto; border:1px solid #555555;}
+
+#menu { width:%100; background-color:#888; padding: 3px 5px 3px 5px; font-weight:bold; }
+
+#rooms_title { float:left; padding: 3px 3px 3px 3px; }
+
+#switcher { padding: 3px 3px 3px 3px; }
+
+#commands { height:250px; background-color:#444; padding: 3px 3px 3px 3px; }
+
+#tcoms { float:left; height:230px; background-color:#333; padding: 3px 3px 3px 3px; margin:0 3px 0 0; }
+
+#com_title {}
+
+#tinputs { float:left; height:235px; background-color:#333; padding: 0 5px 0 5px; }
+
+.tmsgsc { float:left;  padding:0 0 0 3px; }
+.mtopc { background-color:#666; width:450px; font-weight:bold; padding:3px 0 3px 3px;}
+.msgc { overflow:scroll; width:450px; height:210px; color:yellow; background-color:black; padding:0 0 0 3px; }
+
+.mtopcd { background-color:#666; width:340px; font-weight:bold; padding:3px 0 3px 3px;}
+.msgcd { overflow:scroll; width:340px; height:210px; color:yellow; background-color:black; padding:0 0 0 3px; }
+
+#workstations { width:1635px; margin:0 auto; }
+
+.brk { clear:both; }
+
+.hltd { float:left; width:260px; height:60px; padding:5px; vertical-align:top; border:1px solid #555555;}
+.ltd { float:left; width:260px; height:100px; padding:5px; vertical-align:top; border:1px solid #555555; }
+
+.logged_on { color:green; background-color:#333; width:260px; text-align:center; margin:0 auto; }
+
+.status { color:red; background-color:#333; width:100px; text-align:center; margin:0 auto;}
+.dfstatus { color:aquamarine; background-color:#333; width:100px; text-align:center; margin:0 auto;}
+
+.error {color:red;}
+.bold {font-weight:bold; color:black; background-color:white; padding:0px 2px 0px 2px;}
+
+.button { padding: 0 2px 0 2px; }
+a.button:link, a.button:visited { color:#00aaaa; }
+a.button:hover { color:#FFFFFF; }
+a.button { text-decoration:none; } 
+
+.rc { padding: 0 0 0 5; border-left: 1px solid #00aaaa;}
+.lc { padding: 0 5 0 0;}
+
+#macaddr { }
+
+.rm_selected { background-color:#666; color:#aa0000;}
+.rm_not_selected { background-color:#000; color:#00aaaa;}
+
+.room {display:none;}
+.ttop {width:100%;}
+
+input[type='checkbox']
+{
+  width: 10px;
+/*  height: 10px; */
+  padding: 0 5px 0 0;
+}
