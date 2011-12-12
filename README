@@ -32,7 +32,7 @@ Todo list:
 -Create better comments/specs for functions
 -Change config file (ecsmcons.conf) to use records
 -Work on configurations for mac and linux
--Add total of users in each room
+
 
 Basic setup
 
@@ -165,6 +165,8 @@ Versions
 1.1
 
 -Add dates/times to console output
+-Add total of users in each room
+-Change css color for command buttons
 
 1.0
 
