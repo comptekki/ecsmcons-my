@@ -286,6 +286,7 @@ if (!window.WebSocket){
 	var r=false;
 	var rall=false;
 	var first=true;
+    var tot_cnt=0;
 
 	try{
 		if (window.chrome)
@@ -487,11 +488,14 @@ mkjsComAll(?ROOMS,"net_stop"),
 mkjsComAll(?ROOMS,"loggedon"),
 mkjsComAll(?ROOMS,"copy"),
 mkjsComAll(?ROOMS,"com"),
+chk_dupe_usersa(?ROOMS),
 chk_dupe_users(?ROOMS),
 refresh_cons(?ROOMS),
 toggles(?ROOMS),
 rms_keys(Get_rms,Get_rms),
 "
+
+    interval_chk_dupes=setInterval(chk_dupe_users,60000);
 
 }//End else - has websockets
 
@@ -507,7 +511,7 @@ rms_keys(Get_rms,Get_rms),
 <div id='menu'>
 
 <div id='rooms_title'>
-Rooms: 
+[0]-Rooms: 
 </div>
 
 <div id='switcher'>
@@ -1162,7 +1166,6 @@ init2([],_) ->
 
 init2_rm([Rm|_],Ref_cons_time) ->[
 "
-                     interval_"++Rm++"_chk_dupe=setInterval(chk_dupe_users_"++Rm++",60000);
                      interval_"++Rm++"_ref_cons=setInterval(refresh_cons_"++Rm++","++integer_to_list(Ref_cons_time)++");
 
 "].
@@ -1203,10 +1206,36 @@ loop_rm_keys({Rm,Key}) ->
         }
 ".
 
-%%
+%
+
+chk_dupe_usersa(Rooms) ->
+    [
+"
+function  chk_dupe_users(){
+        tot_cnt=0;
+",
+chk_dupe_users_rms(Rooms),
+"
+}
+"].
+
+chk_dupe_users_rms([Room|Rooms]) ->
+
+[jschkduRma(Room)|chk_dupe_users_rms(Rooms)];
+chk_dupe_users_rms([]) ->
+	[].
+
+jschkduRma([Rm|_Rows]) ->
+	[
+"
+    chk_dupe_users_"++Rm++"();
+
+"].
+
+%
 
 chk_dupe_users([Room|Rooms]) ->
-	[jschkduRm(Room)|chk_dupe_users(Rooms)];
+[jschkduRm(Room)|chk_dupe_users(Rooms)];
 chk_dupe_users([]) ->
 	[].
 
@@ -1220,6 +1249,7 @@ function chk_dupe_users_"++Rm++"(){
     var hash_"++Rm++" = [];
 
 	var "++Rm++"cnt=0;
+    
 
 ", jschkduRows(Rows,Rm), "
 
@@ -1228,7 +1258,7 @@ function chk_dupe_users_"++Rm++"(){
             $('#msgdup').html(key+':['+hash_"++Rm++"[key]+']<br>'+$('#msgdup').html())
     }
 
-    $('#"++Rm++"toggle').html('"++Rm++"-'+(("++Rm++"cnt>0)?"++Rm++"cnt:0).toString());
+    $('#"++Rm++"toggle').html('"++Rm++"-['+(("++Rm++"cnt>0)?"++Rm++"cnt:0).toString()+']');
 
 }
 
@@ -1250,6 +1280,8 @@ jschkduRow([{Wk,_Domain,_Mac}|Wks],Rm) ->
             hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]] = [];
         hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]].push('"++Wk++"');
         "++Rm++"cnt++;
+        tot_cnt++;
+        $('#rooms_title').html('['+tot_cnt.toString()+']-'+'Rooms:');
     }
 "
 |jschkduRow(Wks,Rm)]
@@ -1267,7 +1299,7 @@ switcher([]) ->
 switcher_rm([Rm|_Rows]) ->
 	[
 "
-<a href=# id='"++Rm++"toggle' class='button rm_selected' />"++Rm++"</a>
+<a href=# id='"++Rm++"toggle' class='button rm_selected' />"++Rm++"-[0]</a>
 "].
 
 %
