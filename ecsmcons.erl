@@ -430,14 +430,17 @@ init2(?ROOMS,Ref_cons_time),
 	}
 
 	function message(sepcol,msg){
+        var jsnow = new Date();
+        now = jsnow.getDate()+'/'+jsnow.getMonth()+'/'+jsnow.getFullYear()+'-'+jsnow.getHours()+':'+jsnow.getMinutes()+':'+jsnow.getSeconds();
+        
 		if (isNaN(msg)) {
             if(sepcol)
-			    $('#msg').html(msg+'<br>'+$('#msg').html())
+			    $('#msg').html(now+':'+msg+'<br>'+$('#msg').html())
             else
-			    $('#msgcl').html(msg+'<br>'+$('#msgcl').html())
+			    $('#msgcl').html(now+':'+msg+'<br>'+$('#msgcl').html())
         }
 		else
-			$('#msg').html(socket_status(msg)+'<br>'+$('#msg').html())
+			$('#msg').html(now+':'+socket_status(msg)+'<br>'+$('#msg').html())
 	}
 
 	function socket_status(readyState){
