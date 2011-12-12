@@ -432,7 +432,7 @@ init2(?ROOMS,Ref_cons_time),
 
 	function message(sepcol,msg){
         var jsnow = new Date();
-        var month=jsnow.getMonth();
+        var month=jsnow.getMonth()+1;
         var day=jsnow.getDate();
         var hour=jsnow.getHours();
         var mins=jsnow.getMinutes();
@@ -444,7 +444,7 @@ init2(?ROOMS,Ref_cons_time),
         (mins<10)?mins='0'+mins:mins;
         (seconds<10)?seconds='0'+seconds:seconds;
 
-        now = day+'/'+month+'/'+jsnow.getFullYear()+'-'+hour+':'+mins+':'+seconds;
+        now = month+'/'+day+'/'+jsnow.getFullYear()+'-'+hour+':'+mins+':'+seconds;
         
 		if (isNaN(msg)) {
             if(sepcol)
