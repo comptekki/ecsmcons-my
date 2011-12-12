@@ -432,7 +432,19 @@ init2(?ROOMS,Ref_cons_time),
 
 	function message(sepcol,msg){
         var jsnow = new Date();
-        now = jsnow.getDate()+'/'+jsnow.getMonth()+'/'+jsnow.getFullYear()+'-'+jsnow.getHours()+':'+jsnow.getMinutes()+':'+jsnow.getSeconds();
+        var month=jsnow.getMonth();
+        var day=jsnow.getDate();
+        var hour=jsnow.getHours();
+        var mins=jsnow.getMinutes();
+        var seconds=jsnow.getSeconds();
+
+        (month<10)?month='0'+month:month;
+        (day<10)?day='0'+day:day;
+        (hour<10)?hour='0'+hour:hour;
+        (mins<10)?mins='0'+mins:mins;
+        (seconds<10)?seconds='0'+seconds:seconds;
+
+        now = day+'/'+month+'/'+jsnow.getFullYear()+'-'+hour+':'+mins+':'+seconds;
         
 		if (isNaN(msg)) {
             if(sepcol)
