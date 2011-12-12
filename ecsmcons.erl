@@ -511,9 +511,9 @@ Rooms:
 </div>
 
 <div id='switcher'>
-<a href=# id='qcl306toggle' class='button rm_selected' />QCL306</a>
-<a href=# id='qcl304toggle' class='button rm_not_selected' />QCL304</a>
-<a href=# id='qcl302toggle' class='button rm_not_selected' />QCL302</a>
+",
+switcher(?ROOMS),
+"
 </div>
 
 </div>
@@ -1219,12 +1219,16 @@ function chk_dupe_users_"++Rm++"(){
 
     var hash_"++Rm++" = [];
 
+	var "++Rm++"cnt=0;
+
 ", jschkduRows(Rows,Rm), "
 
     for (var key in hash_"++Rm++"){
         if (hash_"++Rm++".hasOwnProperty(key) && hash_"++Rm++"[key].length > 1)
             $('#msgdup').html(key+':['+hash_"++Rm++"[key]+']<br>'+$('#msgdup').html())
     }
+
+    $('#"++Rm++"toggle').html('"++Rm++"-'+(("++Rm++"cnt>0)?"++Rm++"cnt:0).toString());
 
 }
 
@@ -1244,13 +1248,27 @@ jschkduRow([{Wk,_Domain,_Mac}|Wks],Rm) ->
         dupe_"++Rm++".push($('#"++Wk++"logged_on').html().toLowerCase());
         if (typeof hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]] === 'undefined')
             hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]] = [];
-        hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]].push('"++Wk++"')
+        hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]].push('"++Wk++"');
+        "++Rm++"cnt++;
     }
 "
 |jschkduRow(Wks,Rm)]
 	end;
 jschkduRow([],_Rm) ->
 	[].
+
+%
+
+switcher([Room|Rooms]) ->
+	[switcher_rm(Room)|switcher(Rooms)];
+switcher([]) ->
+	[].
+
+switcher_rm([Rm|_Rows]) ->
+	[
+"
+<a href=# id='"++Rm++"toggle' class='button rm_selected' />"++Rm++"</a>
+"].
 
 %
 
