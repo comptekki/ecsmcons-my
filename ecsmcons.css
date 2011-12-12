@@ -71,7 +71,7 @@ input {width:100px;}
 .bold {font-weight:bold; color:black; background-color:white; padding:0px 2px 0px 2px;}
 
 .button { padding: 0 2px 0 2px; }
-a.button:link, a.button:visited { color:#00aaaa; }
+a.button:link, a.button:visited { color:#00ff99; }
 a.button:hover { color:#FFFFFF; }
 a.button { text-decoration:none; } 
 
