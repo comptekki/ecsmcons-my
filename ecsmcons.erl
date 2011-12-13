@@ -1270,7 +1270,7 @@ function chk_dupe_users_"++Rm++"(){
             $('#msgdup').html(key+':['+hash_"++Rm++"[key]+']<br>'+$('#msgdup').html())
     }
 
-    $('#"++Rm++"toggle').html('"++Rm++"-['+(("++Rm++"cnt>0)?"++Rm++"cnt:0).toString()+']');
+    $('#"++Rm++"toggle').html('['+(("++Rm++"cnt>0)?"++Rm++"cnt:0).toString()+']-"++Rm++"');
 
 }
 
@@ -1311,7 +1311,7 @@ switcher([]) ->
 switcher_rm([Rm|_Rows]) ->
 	[
 "
-<a href=# id='"++Rm++"toggle' class='button rm_selected' />"++Rm++"-[0]</a>
+<a href=# id='"++Rm++"toggle' class='button rm_selected' />[0]-"++Rm++"</a>
 "].
 
 %
