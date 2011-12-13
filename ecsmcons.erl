@@ -1022,7 +1022,7 @@ divc({Wk,_Domain,_MacAddr}) ->
 </tr>
 <tr>
 <td>
- <a href=# id='copy_",Wk,"' class='button' />Copy</a>
+ <a href=# id='copy_",Wk,"' class='button' />Copy</a><br>
  <input id='copyfn_",Wk,"' type='text'/>
 <select id='select",Wk,"'>                                                                                                                                                                                              
     ",
