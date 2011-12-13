@@ -31,7 +31,7 @@ Todo list:
 -Get client OS, applications and hardware inventory
 -Create better comments/specs for functions
 -Change config file (ecsmcons.conf) to use records
--Work on configurations for mac and linux
+-Add configurations for mac and linux
 
 
 Basic setup
