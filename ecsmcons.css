@@ -32,7 +32,7 @@ th.oth {font-size:18pt; text-align:center; border:1px solid #555555;}
 table { border-collapse:collapse;}
 input {width:100px;}
 
-#wrapper { width:1680px; margin:0 auto; border:1px solid #555555;}
+#wrapper { width:1720px; margin:0 auto; border:1px solid #555555;}
 
 #menu { width:%100; background-color:#888; padding: 3px 5px 3px 5px; font-weight:bold; }
 
@@ -42,7 +42,7 @@ input {width:100px;}
 
 #commands { height:250px; background-color:#444; padding: 3px 3px 3px 3px; }
 
-#tcoms { float:left; height:230px; background-color:#333; padding: 3px 3px 3px 3px; margin:0 3px 0 0; }
+#tcoms { float:left; height:220px; background-color:#333; padding: 3px 3px 3px 3px; margin:0 3px 0 0; }
 
 #com_title {}
 
@@ -55,12 +55,12 @@ input {width:100px;}
 .mtopcd { background-color:#666; width:340px; font-weight:bold; padding:3px 0 3px 3px;}
 .msgcd { overflow:scroll; width:340px; height:210px; color:yellow; background-color:black; padding:0 0 0 3px; }
 
-#workstations { width:1635px; margin:0 auto; }
+#workstations { width:1700px; margin:0 auto; }
 
 .brk { clear:both; }
 
-.hltd { float:left; width:260px; height:60px; padding:5px; vertical-align:top; border:1px solid #555555;}
-.ltd { float:left; width:260px; height:100px; padding:5px; vertical-align:top; border:1px solid #555555; }
+.hltd { float:left; width:270px; height:60px; padding:5px; vertical-align:top; border:1px solid #555555;}
+.ltd { float:left; width:270px; height:120px; padding:5px; vertical-align:top; border:1px solid #555555; }
 
 .logged_on { color:green; background-color:#333; width:260px; text-align:center; margin:0 auto; }
 
