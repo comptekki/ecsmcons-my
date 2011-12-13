@@ -34,6 +34,7 @@
 -include("ecsmcons.hrl").
 
 -define(COMS, ["","chrome","firefox","disable_search","gp"]).
+-define(APPS, ["","chrome.msi","firefox.exe"]).
 
 app_start() ->
 	application:start(ecsmcons).
@@ -485,8 +486,10 @@ jsAll(?ROOMS,"net_stop"),
 jsAll(?ROOMS,"loggedon"),
 jsAll(?ROOMS,"copy"),
 jsAll(?ROOMS,"com"),
-mkjsAllSelect(?ROOMS),
-mkjsSelect(?ROOMS),
+mkjsAllSelect_copy(?ROOMS),
+mkjsSelect_copy(?ROOMS),
+mkjsAllSelect_com(?ROOMS),
+mkjsSelect_com(?ROOMS),
 mkcomButtons(?ROOMS),
 mkjsComAll(?ROOMS,"ping"),
 mkjsComAll(?ROOMS,"reboot"),
@@ -565,8 +568,8 @@ mkAllRoomsComs([
 
 <div id='tinputs'>
 ",
-mkAllRoomsComsInputCopy({"copy","Copy All"}),
-mkAllRoomsComsInputCom({"com","Com All"}),
+mkAllRoomsComsInput({"copy","Copy All"}),
+mkAllRoomsComsInput({"com","Com All"}),
 "
 </div>
 
@@ -625,8 +628,8 @@ init_open([Room|_]) ->
 "
                      $('#"++Rm++"').show();
                      $('#"++Rm++"_coms').show();
-                     $('#"++Rm++"_comsInput').show();
-                     $('#"++Rm++"_comsInputSelect').show();
+                     $('#"++Rm++"_comsInputcopy').show();
+                     $('#"++Rm++"_comsInputcom').show();
 
                      $('#"++Rm++"toggle').focus();
 "].
@@ -661,8 +664,8 @@ toggle_item([Room|_],Rm) ->
 ["
         $('#"++Rm++"').show();
         $('#"++Rm++"_coms').show();
-        $('#"++Rm++"_comsInput').show();
-        $('#"++Rm++"_comsInputSelect').show();
+        $('#"++Rm++"_comsInputcopy').show();
+        $('#"++Rm++"_comsInputcom').show();
         $('#"++Rm++"toggle').removeClass('rm_selected');
         $('#"++Rm++"toggle').removeClass('rm_not_selected');
         $('#"++Rm++"toggle').addClass('rm_selected');
@@ -671,8 +674,8 @@ toggle_item([Room|_],Rm) ->
 ["
         $('#"++Room++"').hide();
         $('#"++Room++"_coms').hide();
-        $('#"++Room++"_comsInput').hide();
-        $('#"++Room++"_comsInputSelect').hide();
+        $('#"++Room++"_comsInputcopy').hide();
+        $('#"++Room++"_comsInputcom').hide();
         $('#"++Room++"toggle').removeClass('rm_selected');
         $('#"++Room++"toggle').removeClass('rm_not_selected');
         $('#"++Room++"toggle').addClass('rm_not_selected')
@@ -742,30 +745,103 @@ jsAllConfirm([],_) -> [].
 
 %%
 
-mkjsAllSelect([Room|Rooms]) ->
-	[mkjsAllSelectRm(Room)|mkjsAllSelect(Rooms)];
-mkjsAllSelect([]) ->
+mkjsAllSelect_copy([Room|Rooms]) ->
+	[mkjsAllSelectRm_copy(Room)|mkjsAllSelect_copy(Rooms)];
+mkjsAllSelect_copy([]) ->
     [].
 
-mkjsAllSelectRm([Room|Rows]) ->
+mkjsAllSelectRm_copy([Room|Rows]) ->
 	[
 "
-$('#comAllSelect"++Room++"').change(function(){
 
-    $('#comAllInput"++Room++"').val($('#comAllSelect"++Room++" option:selected').text());
-    ", jsAllSelectRows(Rows), "
+$('#copyAllSelect"++Room++"').change(function(){
+
+    $('#copyAllInput"++Room++"').val($('#copyAllSelect"++Room++" option:selected').text());
+    ", jsAllSelectRows_copy(Rows), "
 });
 
 "].
 
-jsAllSelectRows([Row|Rows]) ->
-	[jsAllSelect(Row)|jsAllSelectRows(Rows)];
-jsAllSelectRows([]) ->
+jsAllSelectRows_copy([Row|Rows]) ->
+	[jsAllSelect_copy(Row)|jsAllSelectRows_copy(Rows)];
+jsAllSelectRows_copy([]) ->
     [].
 
-jsAllSelect([{Wk,_Domain,_Mac}|Wks]) ->
+jsAllSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
 	case Wk of
-		"." ->	jsAllSelect(Wks);
+		"." ->	jsAllSelect_copy(Wks);
+		   _ ->
+			Rm=string:sub_string(Wk,1,6),
+			[
+"
+    if(
+        ($('#copyAll",Rm,"check').prop('checked') && $('#",Wk,"check').prop('checked')) ||
+        (!$('#copyAll",Rm,"check').prop('checked') && 
+            (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
+      )
+        $('#copystr_",Wk,"').val($('#copyAllInput"++Rm++"').val());
+"|jsAllSelect_copy(Wks)]
+	end;
+jsAllSelect_copy([]) ->
+	[].
+%%
+
+mkjsSelect_copy([Room|Rooms]) ->
+	[mkjsSelectRm_copy(Room)|mkjsSelect_copy(Rooms)];
+mkjsSelect_copy([]) ->
+    [].
+
+mkjsSelectRm_copy([_Room|Rows]) ->
+   jsSelectRows_copy(Rows).
+
+jsSelectRows_copy([Row|Rows]) ->
+	[jsSelect_copy(Row)|jsSelectRows_copy(Rows)];
+jsSelectRows_copy([]) ->
+    [].
+
+jsSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
+	case Wk of
+		"." ->	jsSelect_copy(Wks);
+		   _ ->
+			[
+"
+
+$('#select"++Wk++"').change(function(){
+    $('#copystr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
+});
+
+"|jsSelect_copy(Wks)]
+	end;
+jsSelect_copy([]) ->
+	[].
+
+%%
+
+mkjsAllSelect_com([Room|Rooms]) ->
+	[mkjsAllSelectRm_com(Room)|mkjsAllSelect_com(Rooms)];
+mkjsAllSelect_com([]) ->
+    [].
+
+mkjsAllSelectRm_com([Room|Rows]) ->
+	[
+"
+
+$('#comAllSelect"++Room++"').change(function(){
+
+    $('#comAllInput"++Room++"').val($('#comAllSelect"++Room++" option:selected').text());
+    ", jsAllSelectRows_com(Rows), "
+});
+
+"].
+
+jsAllSelectRows_com([Row|Rows]) ->
+	[jsAllSelect_com(Row)|jsAllSelectRows_com(Rows)];
+jsAllSelectRows_com([]) ->
+    [].
+
+jsAllSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
+	case Wk of
+		"." ->	jsAllSelect_com(Wks);
 		   _ ->
 			Rm=string:sub_string(Wk,1,6),
 			[
@@ -776,28 +852,28 @@ jsAllSelect([{Wk,_Domain,_Mac}|Wks]) ->
             (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
       )
         $('#comstr_",Wk,"').val($('#comAllInput"++Rm++"').val());
-"|jsAllSelect(Wks)]
+"|jsAllSelect_com(Wks)]
 	end;
-jsAllSelect([]) ->
+jsAllSelect_com([]) ->
 	[].
 %%
 
-mkjsSelect([Room|Rooms]) ->
-	[mkjsSelectRm(Room)|mkjsSelect(Rooms)];
-mkjsSelect([]) ->
+mkjsSelect_com([Room|Rooms]) ->
+	[mkjsSelectRm_com(Room)|mkjsSelect_com(Rooms)];
+mkjsSelect_com([]) ->
     [].
 
-mkjsSelectRm([_Room|Rows]) ->
-   jsSelectRows(Rows).
+mkjsSelectRm_com([_Room|Rows]) ->
+   jsSelectRows_com(Rows).
 
-jsSelectRows([Row|Rows]) ->
-	[jsSelect(Row)|jsSelectRows(Rows)];
-jsSelectRows([]) ->
+jsSelectRows_com([Row|Rows]) ->
+	[jsSelect_com(Row)|jsSelectRows_com(Rows)];
+jsSelectRows_com([]) ->
     [].
 
-jsSelect([{Wk,_Domain,_Mac}|Wks]) ->
+jsSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
 	case Wk of
-		"." ->	jsSelect(Wks);
+		"." ->	jsSelect_com(Wks);
 		   _ ->
 			[
 "
@@ -806,9 +882,9 @@ $('#select"++Wk++"').change(function(){
     $('#comstr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
 });
 
-"|jsSelect(Wks)]
+"|jsSelect_com(Wks)]
 	end;
-jsSelect([]) ->
+jsSelect_com([]) ->
 	[].
 
 %%
@@ -832,55 +908,39 @@ mkARComsComs(_Rm,[]) -> [].
 
 %%
 
-mkAllRoomsComsInputCopy(Com) ->
-	mkARComsInputCopy(?ROOMS,Com).
+mkAllRoomsComsInput(Com) ->
+	mkARComsInput(?ROOMS,Com).
 
-mkARComsInputCopy([Room|Rooms],Com) ->
+mkARComsInput([Room|Rooms],ComT) ->
+    {Com,ComText}=ComT,
 	[Rm|_]=Room,
 	["
 
-<div id='",Rm,"_comsInput' class='room'>
-    "++mkARComsComsInputCopy(Rm,Com)++"
+<div id='",Rm,"_comsInput"++Com++"' class='room'>
+    "++mkARComsComsInput(Rm,ComT)++"
 </div>
 
-"|mkARComsInputCopy(Rooms,Com)];
-mkARComsInputCopy([],_Com) ->
+"|mkARComsInput(Rooms,{Com,ComText})];
+mkARComsInput([],_Com) ->
    [].
 
-mkARComsComsInputCopy(Rm,{Com,ComText}) ->
+mkARComsComsInput(Rm,{Com,ComText}) ->
 ["
 <input id='"++Com++"All"++Rm++"check' type='checkbox'  /></a>
  <a href=# id='"++Com++"All"++Rm++"' class='button' />",ComText,"</a><br> 
- <input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput' /><br>
-"].
-
-%%
-
-mkAllRoomsComsInputCom(Coms) ->
-	mkARComsInputCom(?ROOMS,Coms).
-
-mkARComsInputCom([Room|Rooms],Coms) ->
-	[Rm|_]=Room,
-	["
-
-<div id='"++Rm ++"_comsInputSelect' class='room'>
-"++mkARComsComsInputCom(Rm,Coms)++"
-</div>
-
-"|mkARComsInputCom(Rooms,Coms)];
-mkARComsInputCom([],_Coms) ->
-   [].
-
-mkARComsComsInputCom(Rm,{Com,ComText}) ->
-["
-<input id='"++Com++"All"++Rm++"check' type='checkbox'  /></a>
- <a href=# id='"++Com++"All"++Rm++"' class='button' />",ComText,"</a><br>
-<input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput'/>
+ <input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput' />
 <select id='"++Com++"AllSelect"++Rm++"'>
     ",
-		comSelections(?COMS),
+        case Com of
+            "copy" ->
+		        selections(?APPS);
+            "com" ->
+		        selections(?COMS)
+        end,
 "
-</select>"].
+</select>
+
+"].
 
 %%
 
@@ -964,6 +1024,12 @@ divc({Wk,_Domain,_MacAddr}) ->
 <td>
  <a href=# id='copy_",Wk,"' class='button' />Copy</a>
  <input id='copyfn_",Wk,"' type='text'/>
+<select id='select",Wk,"'>                                                                                                                                                                                              
+    ",
+       selections(?APPS),
+"                                                                                                                                                                                                                                     
+</select>
+
 </td>
 </tr>
 
@@ -973,7 +1039,7 @@ divc({Wk,_Domain,_MacAddr}) ->
 <input id='comstr_",Wk,"' type='text'/>
 <select id='select",Wk,"'>                                                                                                                                                                                              
     ",
-        comSelections(?COMS),
+        selections(?COMS),
 "                                                                                                                                                                                                                                     
 </select>
 </td>
@@ -986,12 +1052,12 @@ divc({Wk,_Domain,_MacAddr}) ->
 
 %
 
-comSelections([Com|Coms]) ->
+selections([Com|Coms]) ->
 	[
 "
 <option value=\""++Com++"\">"++Com++"</option>
-"|comSelections(Coms)];
-comSelections([]) ->
+"|selections(Coms)];
+selections([]) ->
 [].
 	
 %
