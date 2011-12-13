@@ -1286,7 +1286,7 @@ jschkduRow([{Wk,_Domain,_Mac}|Wks],Rm) ->
 		   _ ->
 ["
 
-    if (!($('#"++Wk++"logged_on').html().indexOf('.')>-1 || $('#"++Wk++"logged_on').html().indexOf('X')>-1)){
+    if (!(($('#"++Wk++"logged_on').html().indexOf('.')>-1 && $('#"++Wk++"logged_on').html().length==1) || $('#"++Wk++"logged_on').html().indexOf('X')>-1)){
         dupe_"++Rm++".push($('#"++Wk++"logged_on').html().toLowerCase());
         if (typeof hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]] === 'undefined')
             hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]] = [];
