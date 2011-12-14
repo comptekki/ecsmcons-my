@@ -93,8 +93,7 @@ handle_http(Req, Port) ->
 fireWall(Req) ->
 	{ok, [_,{FireWallOnOff,IPAddresses},_,_,_]}=file:consult(?CONF),
 	case FireWallOnOff of
-		on -> allow;
-		onn ->
+		on ->
 			{req,_Socket,_SocketMode,PeerAddress,_PeerPort,_PeerCert,_Connection,
 			    _ContentLength,_Vsn,_Method,_Uri,_Args,_Headers,_Body,_}=Req:raw(),
 			case lists:member(PeerAddress,IPAddresses) of
