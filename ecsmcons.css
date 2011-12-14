@@ -40,20 +40,20 @@ input {width:100px;}
 
 #switcher { padding: 3px 3px 3px 3px; }
 
-#commands { height:250px; background-color:#444; padding: 3px 3px 3px 3px; }
+#commands { height:260px; background-color:#444; padding: 3px 3px 3px 3px; }
 
-#tcoms { float:left; height:220px; background-color:#333; padding: 3px 3px 3px 3px; margin:0 3px 0 0; }
+#tcoms { float:left; height:240px; background-color:#333; padding: 3px 3px 3px 3px; margin:0 3px 0 0; }
 
 #com_title {}
 
-#tinputs { float:left; height:235px; background-color:#333; padding: 0 5px 0 5px; }
+#tinputs { float:left; height:245px; background-color:#333; padding: 0 5px 0 5px; }
 
 .tmsgsc { float:left;  padding:0 0 0 3px; }
 .mtopc { background-color:#666; width:450px; font-weight:bold; padding:3px 0 3px 3px;}
-.msgc { overflow:scroll; width:450px; height:210px; color:yellow; background-color:black; padding:0 0 0 3px; }
+.msgc { overflow:scroll; width:450px; height:220px; color:yellow; background-color:black; padding:0 0 0 3px; }
 
 .mtopcd { background-color:#666; width:340px; font-weight:bold; padding:3px 0 3px 3px;}
-.msgcd { overflow:scroll; width:340px; height:210px; color:yellow; background-color:black; padding:0 0 0 3px; }
+.msgcd { overflow:scroll; width:340px; height:220px; color:yellow; background-color:black; padding:0 0 0 3px; }
 
 #workstations { width:1700px; margin:0 auto; }
 
