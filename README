@@ -66,12 +66,11 @@ Client/Server Setup
    [{"row1-1","sub_somain.org","mac-address"},{"row1-2","sub_somain.org","mac-address"},{"row1-3","sub_somain.org","mac-address"},{"row1-4","sub_somain.org","mac-address"},{"row1-5","sub_somain.org","mac-address"}]
  ],
 ]).
--define(CSS,"/file/system/path/to/ecsmcons/ecsmcons.css").
--define(JQUERY,"/file/system/path/to/jquery-1.6.4.min.js").
 -define(FAVICON,"/file/system/path/to/ecsmcons/favicon.ico").
 -define(CERTFILE,"/file/system/path/to/cert-file.pem").
 -define(KEYFILE,"/file/system/path/to/key-file.pem").
 -define(UPLOADS,"/file/system/path/to/ecsmcons/uploads/").
+-define(STATIC,"/file/system/path/to/ecsmcons/static").
 
 	  ii. ecom.hrl setup (for deepfreeze and windows 7)
 
@@ -164,7 +163,7 @@ Versions
 --------
 1.2
 
--
+-Add STATIC -define remove CSS and JQUERY -define's
 
 1.1
 
