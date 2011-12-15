@@ -334,6 +334,8 @@ init2(?ROOMS,Ref_cons_time),
 						case 'pong':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','green');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#005500');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#005555');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#005555');
 							message(sepcol,boxCom[0] + ': ' + 'pong');
 							break;
 					    case 'pang':
@@ -975,22 +977,21 @@ divhc({Wk,Domain,MacAddr}) ->
 	case Wk of
 		"." ->	["<div class=\"hltd\">.</div>"];
 		   _ ->
-			["<div class=\"hltd\">
-<table>
-<tr>
+			["
+
+<div id='",Wk,"_hltd' class=\"hltd\">
+
 <div id='",Wk,"logged_on' class='logged_on'>.</div>
-</tr>
-<tr>
-<td><input id='",Wk,"check' type='checkbox' /></a>",Wk,Domain,"</td>
-<td><div id='",Wk,"status' class='status'>Up</div></td>
-</tr>
-<tr>
-<td><div id='",Wk,"macaddr'>",MacAddr,"</div></td>
-<td><div id='",Wk,"dfstatus' class='dfstatus'>DF?</div>
-</td>
-</tr>
-</table>
-</div>"]
+
+<div class='chkbox'><input id='",Wk,"check' type='checkbox' class='checkbox' />",Wk,Domain,"</a></div> <div id='",Wk,"status' class='status'>Up</div>
+
+<div class='brk'></div>
+
+<div id='",Wk,"macaddr' class='macaddr'>",MacAddr,"</div> <div id='",Wk,"dfstatus' class='dfstatus'>DF?</div>
+
+</div>
+
+"]
 	end.
 
 divc({Wk,_Domain,_MacAddr}) ->
@@ -998,8 +999,8 @@ divc({Wk,_Domain,_MacAddr}) ->
 		"." ->	["<div class=\"ltd\">.</div>"];
 		   _ ->
 	["
-<div class=\"ltd\">
-<table>
+<div id='"++Wk++"_ltd' class=\"ltd\">
+<table id='"++Wk++"_ccell'>
 <tr>
 <td class=\"lc\">
  <a href=# id='ping_",Wk,"' class='button' />P</a>
