@@ -172,12 +172,6 @@ checkCreds([],_Uarg,_Parg,_Req) ->
 handle('GET', ["favicon.ico"], Req, _Port) ->	
 	Req:file(?FAVICON);
 
-%handle('GET', ["static","ecsmcons.css"], Req, _Port) ->
-%	Req:file(?CSS);
-
-%handle('GET', ["static","jquery-1.6.4.min.js"], Req, _Port) ->	
-%	Req:file(?JQUERY);
-
 handle('GET', ["logout"], Req, _Port) ->
 	Req:delete_cookie("ecsmcons_logged_in"),	
 	Req:respond(302, [{'Location', "/login"}], "");
