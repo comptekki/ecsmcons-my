@@ -57,6 +57,7 @@ start1(_Port) ->
 start(_Type,[Port]) ->
 	misultin:start_link([
 						 {port, Port},
+						 {static, ?STATIC},
 						 {loop, fun(Req) -> handle_http(Req, Port) end},
 						 {ws_loop, fun(Ws) -> handle_websocket(Ws) end}
 						]).
@@ -171,11 +172,11 @@ checkCreds([],_Uarg,_Parg,_Req) ->
 handle('GET', ["favicon.ico"], Req, _Port) ->	
 	Req:file(?FAVICON);
 
-handle('GET', ["ecsmcons.css"], Req, _Port) ->
-	Req:file(?CSS);
+%handle('GET', ["static","ecsmcons.css"], Req, _Port) ->
+%	Req:file(?CSS);
 
-handle('GET', ["jquery-1.6.4.min.js"], Req, _Port) ->	
-	Req:file(?JQUERY);
+%handle('GET', ["static","jquery-1.6.4.min.js"], Req, _Port) ->	
+%	Req:file(?JQUERY);
 
 handle('GET', ["logout"], Req, _Port) ->
 	Req:delete_cookie("ecsmcons_logged_in"),	
@@ -191,7 +192,7 @@ handle('GET', ["login"], Req, _Port) ->
 ["<html>
 <head> 
 <title>ECSMCons Login</title>
-<script type='text/javascript' src='jquery-1.6.4.min.js'></script>
+<script type='text/javascript' src='/static/jquery-1.6.4.min.js'></script>
 <script>
 $(document).ready(function(){
 
@@ -264,8 +265,8 @@ handleMain(Req,Port) ->
 ["<html>
 <head> 
 <title>ECSMCons</title> 
-<link href='ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
-<script type='text/javascript' src='jquery-1.6.4.min.js'></script>
+<link href='/static/ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
+<script type='text/javascript' src='/static/jquery-1.6.4.min.js'></script>
 
 <script>
 
