@@ -334,8 +334,8 @@ init2(?ROOMS,Ref_cons_time),
 						case 'pong':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','green');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#005500');
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#005555');
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#005555');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#888800');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#888800');
 							message(sepcol,boxCom[0] + ': ' + 'pong');
 							break;
 					    case 'pang':
