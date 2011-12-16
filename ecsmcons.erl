@@ -519,9 +519,9 @@ rms_keys(Get_rms,Get_rms),
 <body>
 <div id='wrapper'>
 
-<div id='menu'>
+<div id='menu' class='fl'>
 
-<div id='rooms_title'>
+<div id='rooms_title' class='fl'>
 [0]-Rooms: 
 </div>
 
@@ -533,457 +533,467 @@ switcher(?ROOMS),
 
 </div>
 
-<div id='commands'>
+ <div class='brk'></div>
 
-<div id='com_title'>
-Commands:
-</div>
+ <div id='commands'>
 
-<div id='tcoms'>",
-case is_list(login()) of
-	true -> "<a href='logout' id='logout' class='button' />Logout</a><br>";
-	false -> ""
-end,
-"
-<a href=# id='disconnect' class='button' />Disconnect</a><br>
-",
-mkAllRoomsComs([
-				{"ping","Ping All"},
-				{"reboot","Reboot All"},
-				{"shutdown","Shutdown All"},
-				{"wake","Wake All"},
-				{"dfthaw","DeepFreeze Thaw All"},
-				{"dffreeze","DeepFreeze Freeze All"},
-				{"dfstatus","DeepFreeze Status All"},
-				{"net_restart","Restart Win Service All"},
-				{"net_restart","Stop Win Service All"},
-				{"loggedon","Logged On All"}
-			   ]),
-"
-</div>
+ <div id='com_title'>
+ Commands:
+ </div>
 
-<div id='tinputs'>
-",
-mkAllRoomsComsInput({"copy","Copy All"}),
-mkAllRoomsComsInput({"com","Com All"}),
-"
-</div>
+ <div id='tcoms'>",
+ case is_list(login()) of
+	 true -> "<a href='logout' id='logout' class='button' />Logout</a><br>";
+	 false -> ""
+ end,
+ "
+ <a href=# id='disconnect' class='button' />Disconnect</a><br>
+ ",
+ mkAllRoomsComs([
+				 {"ping","Ping All"},
+				 {"reboot","Reboot All"},
+				 {"shutdown","Shutdown All"},
+				 {"wake","Wake All"},
+				 {"dfthaw","DeepFreeze Thaw All"},
+				 {"dffreeze","DeepFreeze Freeze All"},
+				 {"dfstatus","DeepFreeze Status All"},
+				 {"net_restart","Restart Win Service All"},
+				 {"net_restart","Stop Win Service All"},
+				 {"loggedon","Logged On All"}
+				]),
+ "
+ </div>
 
-<div id='tmsgs' class='tmsgsc'>
-  <div id='mtop' class='mtopc'>Server Messages (most recent at top):</div>
-    <div id='msg-div'>
-    <div id='msg' class='msgc'></div>
-  </div>
-</div>
+ <div id='tinputs'>
+ ",
+ mkAllRoomsComsInput({"copy","Copy All"}),
+ mkAllRoomsComsInput({"com","Com All"}),
+ "
+ </div>
 
-<div id='tmsgscl' class='tmsgsc'>
-  <div id='mtopcl' class='mtopc'>Client Messages (most recent at top):</div>
-    <div id='msg-divcl'>
-    <div id='msgcl' class='msgc'></div>
-  </div>
-</div>
+ <div id='tmsgs' class='tmsgsc'>
+   <div id='mtop' class='mtopc'>Server Messages (most recent at top):</div>
+	 <div id='msg-div'>
+	 <div id='msg' class='msgc'></div>
+   </div>
+ </div>
 
-<div id='tmsgsdup' class='tmsgsc'>
-  <div id='mtopdup' class='mtopcd'>Duplicate Users (most recent at top):</div>
-    <div id='msg-div-dup'>
-    <div id='msgdup' class='msgcd'></div>
-  </div>
-</div>
+ <div id='tmsgscl' class='tmsgsc'>
+   <div id='mtopcl' class='mtopc'>Client Messages (most recent at top):</div>
+	 <div id='msg-divcl'>
+	 <div id='msgcl' class='msgc'></div>
+   </div>
+ </div>
 
-</div>
+ <div id='tmsgsdup' class='tmsgsc'>
+   <div id='mtopdup' class='mtopcd'>Duplicate Users (most recent at top):</div>
+	 <div id='msg-div-dup'>
+	 <div id='msgdup' class='msgcd'></div>
+   </div>
+ </div>
 
-<div class='brk'></div>
+ </div>
 
-<div id='workstations'>
+ <div class='brk'></div>
 
-",
-mkRooms(?ROOMS),
-"
+ <div id='workstations'>
 
-</div>
+ ",
+ mkRooms(?ROOMS),
+ "
 
-</div>
+ </div>
 
-</body> 
-</html>
-"
-]);
-                login ->
-                    Req:ok([{"Content-Type", "text/html"}],["<meta HTTP-EQUIV='REFRESH' content='0; url=/login'>"])
-            end;
-    deny ->
-        fwDenyMessage(Req)
-end. % end handle_http()
+ </div>
 
-%%
+ </body> 
+ </html>
+ "
+ ]);
+				 login ->
+					 Req:ok([{"Content-Type", "text/html"}],["<meta HTTP-EQUIV='REFRESH' content='0; url=/login'>"])
+			 end;
+	 deny ->
+		 fwDenyMessage(Req)
+ end. % end handle_http()
 
-init_open([Room|_]) ->
-	[Rm|_]=Room,
- 
-[
-"
-                     $('#"++Rm++"').show();
-                     $('#"++Rm++"_coms').show();
-                     $('#"++Rm++"_comsInputcopy').show();
-                     $('#"++Rm++"_comsInputcom').show();
+ %%
 
-                     $('#"++Rm++"toggle').focus();
-"].
+ init_open([Room|_]) ->
+	 [Rm|_]=Room,
 
-%%
+ [
+ "
+					  $('#"++Rm++"').show();
+					  $('#"++Rm++"_coms').show();
+					  $('#"++Rm++"_comsInputcopy').show();
+					  $('#"++Rm++"_comsInputcom').show();
 
-toggles([Room|Rooms]) ->
-	[toggles_rm(Room)|toggles(Rooms)];
-toggles([]) ->
+					  $('#"++Rm++"toggle').focus();
+ "].
+
+ %%
+
+ toggles([Room|Rooms]) ->
+	 [toggles_rm(Room)|toggles(Rooms)];
+ toggles([]) ->
+	 [].
+
+ toggles_rm([Rm|_]) ->
+	 [
+ "
+	 $('#"++Rm++"toggle').click(function(){
+ ",
+ toggle_items(?ROOMS,Rm),
+ "
+	 });
+ "].
+
+ toggle_items([Room|Rooms],Rm) ->
+	 [toggle_item(Room,Rm)|toggle_items(Rooms,Rm)];
+ toggle_items([],_) ->
+	 [].
+
+ toggle_item([Room|_],Rm) ->
+	 [
+	  case Room of
+
+		  Rm ->
+ ["
+		 $('#"++Rm++"').show();
+		 $('#"++Rm++"_coms').show();
+		 $('#"++Rm++"_comsInputcopy').show();
+		 $('#"++Rm++"_comsInputcom').show();
+		 $('#"++Rm++"toggle').removeClass('rm_selected');
+		 $('#"++Rm++"toggle').removeClass('rm_not_selected');
+		 $('#"++Rm++"toggle').addClass('rm_selected');
+ "];
+		  _ -> 
+ ["
+		 $('#"++Room++"').hide();
+		 $('#"++Room++"_coms').hide();
+		 $('#"++Room++"_comsInputcopy').hide();
+		 $('#"++Room++"_comsInputcom').hide();
+		 $('#"++Room++"toggle').removeClass('rm_selected');
+		 $('#"++Room++"toggle').removeClass('rm_not_selected');
+		 $('#"++Room++"toggle').addClass('rm_not_selected')
+
+ "]
+	  end
+	 ];
+
+ toggle_item([],_) ->
+	 [].
+
+ %%
+
+ jsAll([Room|Rooms],Com) ->
+	 [Rm|_]=Room,
+	 [
+
+ case Com of
+	 "com"  -> ifcomcopy(Rm,Com);
+	 "copy" -> ifcomcopy(Rm,Com);
+		  _ ->
+ ["
+
+	 $('#",Com,"All",Rm,"').click(function(){
+			 ",Com,"All",Rm,"();
+			 message(true,'",Com," All ",Rm,"...')
+	 });
+
+ "]
+ end
+ |jsAll(Rooms,Com)];
+ jsAll([],_) -> [].
+
+ %%
+
+ ifcomcopy(Rm,Com) ->
+ ["
+	 $('#",Com,"All",Rm,"').click(function(){
+		 if($('#",Com,"AllInput",Rm,"').val().length){
+			 ",Com,"All",Rm,"();
+			 message(true,'",Com," All ",Rm,"...')
+		 } else {
+			 $('#",Com,"AllInput",Rm,"').val('!');
+			 message(true,'",Com," All ",Rm," is blank!')
+		 }
+	 });
+
+ "].
+
+ %%
+
+ jsAllConfirm([Room|Rooms],Com) ->
+	 [Rm|_]=Room,
+	 [
+ "
+
+	 $('#"++Com++"All"++Rm++"').click(function(){
+		 rall=confirm('"++Com++" All Systems "++Rm++"?');
+		 if (rall==true)
+			 "++Com++"All"++Rm++"()
+		 else
+			 message(true,'"++Com++" All in "++Rm++" aborted...')
+	 });
+
+ "|jsAllConfirm(Rooms,Com)];
+ jsAllConfirm([],_) -> [].
+
+ %%
+
+ mkjsAllSelect_copy([Room|Rooms]) ->
+	 [mkjsAllSelectRm_copy(Room)|mkjsAllSelect_copy(Rooms)];
+ mkjsAllSelect_copy([]) ->
+	 [].
+
+ mkjsAllSelectRm_copy([Room|Rows]) ->
+	 [
+ "
+
+ $('#copyAllSelect"++Room++"').change(function(){
+
+	 $('#copyAllInput"++Room++"').val($('#copyAllSelect"++Room++" option:selected').text());
+	 ", jsAllSelectRows_copy(Rows), "
+ });
+
+ "].
+
+ jsAllSelectRows_copy([Row|Rows]) ->
+	 [jsAllSelect_copy(Row)|jsAllSelectRows_copy(Rows)];
+ jsAllSelectRows_copy([]) ->
+	 [].
+
+ jsAllSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
+	 case Wk of
+		 "." ->	jsAllSelect_copy(Wks);
+			_ ->
+			 Rm=string:sub_string(Wk,1,6),
+			 [
+ "
+	 if(
+		 ($('#copyAll",Rm,"check').prop('checked') && $('#",Wk,"check').prop('checked')) ||
+		 (!$('#copyAll",Rm,"check').prop('checked') && 
+			 (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
+	   )
+		 $('#copystr_",Wk,"').val($('#copyAllInput"++Rm++"').val());
+ "|jsAllSelect_copy(Wks)]
+	 end;
+ jsAllSelect_copy([]) ->
+	 [].
+ %%
+
+ mkjsSelect_copy([Room|Rooms]) ->
+	 [mkjsSelectRm_copy(Room)|mkjsSelect_copy(Rooms)];
+ mkjsSelect_copy([]) ->
+	 [].
+
+ mkjsSelectRm_copy([_Room|Rows]) ->
+	jsSelectRows_copy(Rows).
+
+ jsSelectRows_copy([Row|Rows]) ->
+	 [jsSelect_copy(Row)|jsSelectRows_copy(Rows)];
+ jsSelectRows_copy([]) ->
+	 [].
+
+ jsSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
+	 case Wk of
+		 "." ->	jsSelect_copy(Wks);
+			_ ->
+			 [
+ "
+
+ $('#select"++Wk++"').change(function(){
+	 $('#copystr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
+ });
+
+ "|jsSelect_copy(Wks)]
+	 end;
+ jsSelect_copy([]) ->
+	 [].
+
+ %%
+
+ mkjsAllSelect_com([Room|Rooms]) ->
+	 [mkjsAllSelectRm_com(Room)|mkjsAllSelect_com(Rooms)];
+ mkjsAllSelect_com([]) ->
+	 [].
+
+ mkjsAllSelectRm_com([Room|Rows]) ->
+	 [
+ "
+
+ $('#comAllSelect"++Room++"').change(function(){
+
+	 $('#comAllInput"++Room++"').val($('#comAllSelect"++Room++" option:selected').text());
+	 ", jsAllSelectRows_com(Rows), "
+ });
+
+ "].
+
+ jsAllSelectRows_com([Row|Rows]) ->
+	 [jsAllSelect_com(Row)|jsAllSelectRows_com(Rows)];
+ jsAllSelectRows_com([]) ->
+	 [].
+
+ jsAllSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
+	 case Wk of
+		 "." ->	jsAllSelect_com(Wks);
+			_ ->
+			 Rm=string:sub_string(Wk,1,6),
+			 [
+ "
+	 if(
+		 ($('#comAll",Rm,"check').prop('checked') && $('#",Wk,"check').prop('checked')) ||
+		 (!$('#comAll",Rm,"check').prop('checked') && 
+			 (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
+	   )
+		 $('#comstr_",Wk,"').val($('#comAllInput"++Rm++"').val());
+ "|jsAllSelect_com(Wks)]
+	 end;
+ jsAllSelect_com([]) ->
+	 [].
+ %%
+
+ mkjsSelect_com([Room|Rooms]) ->
+	 [mkjsSelectRm_com(Room)|mkjsSelect_com(Rooms)];
+ mkjsSelect_com([]) ->
+	 [].
+
+ mkjsSelectRm_com([_Room|Rows]) ->
+	jsSelectRows_com(Rows).
+
+ jsSelectRows_com([Row|Rows]) ->
+	 [jsSelect_com(Row)|jsSelectRows_com(Rows)];
+ jsSelectRows_com([]) ->
+	 [].
+
+ jsSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
+	 case Wk of
+		 "." ->	jsSelect_com(Wks);
+			_ ->
+			 [
+ "
+
+ $('#select"++Wk++"').change(function(){
+	 $('#comstr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
+ });
+
+ "|jsSelect_com(Wks)]
+	 end;
+ jsSelect_com([]) ->
+	 [].
+
+ %%
+
+ mkAllRoomsComs(Coms) ->
+	 mkARComs(?ROOMS,Coms).
+
+ mkARComs([Room|Rooms],Coms) ->
+	 [Rm|_]=Room,
+	 ["<div id='",Rm,"_coms' class='room'>"++mkARComsComs(Rm,Coms)++"</div>"|mkARComs(Rooms,Coms)];
+ mkARComs([],_Coms) ->
+	 [].
+
+ mkARComsComs(Rm,[{Com,ComText}|Coms]) ->
+ ["
+
+ <div class='fl'>
+ <input id='",Com,"All",Rm,"check' type='checkbox' class='checkbox' /></a>
+  <a href=# id='",Com,"All",Rm,"' class='button'/>",ComText,"</a>
+ </div>
+ <div class='brk'></div>
+
+ "|mkARComsComs(Rm,Coms)];
+ mkARComsComs(_Rm,[]) -> [].
+
+ %%
+
+ mkAllRoomsComsInput(Com) ->
+	 mkARComsInput(?ROOMS,Com).
+
+ mkARComsInput([Room|Rooms],ComT) ->
+	 {Com,ComText}=ComT,
+	 [Rm|_]=Room,
+	 ["
+
+ <div id='",Rm,"_comsInput"++Com++"' class='room'>
+	 "++mkARComsComsInput(Rm,ComT)++"
+ </div>
+
+ "|mkARComsInput(Rooms,{Com,ComText})];
+ mkARComsInput([],_Com) ->
 	[].
 
-toggles_rm([Rm|_]) ->
-	[
-"
-    $('#"++Rm++"toggle').click(function(){
-",
-toggle_items(?ROOMS,Rm),
-"
-    });
-"].
-
-toggle_items([Room|Rooms],Rm) ->
-	[toggle_item(Room,Rm)|toggle_items(Rooms,Rm)];
-toggle_items([],_) ->
-	[].
-
-toggle_item([Room|_],Rm) ->
-	[
-	 case Room of
-
-		 Rm ->
-["
-        $('#"++Rm++"').show();
-        $('#"++Rm++"_coms').show();
-        $('#"++Rm++"_comsInputcopy').show();
-        $('#"++Rm++"_comsInputcom').show();
-        $('#"++Rm++"toggle').removeClass('rm_selected');
-        $('#"++Rm++"toggle').removeClass('rm_not_selected');
-        $('#"++Rm++"toggle').addClass('rm_selected');
-"];
-		 _ -> 
-["
-        $('#"++Room++"').hide();
-        $('#"++Room++"_coms').hide();
-        $('#"++Room++"_comsInputcopy').hide();
-        $('#"++Room++"_comsInputcom').hide();
-        $('#"++Room++"toggle').removeClass('rm_selected');
-        $('#"++Room++"toggle').removeClass('rm_not_selected');
-        $('#"++Room++"toggle').addClass('rm_not_selected')
-
-"]
-	 end
-	];
-
-toggle_item([],_) ->
-	[].
-
-%%
-
-jsAll([Room|Rooms],Com) ->
-	[Rm|_]=Room,
-	[
-
-case Com of
-	"com"  -> ifcomcopy(Rm,Com);
-	"copy" -> ifcomcopy(Rm,Com);
-	     _ ->
-["
-
-	$('#",Com,"All",Rm,"').click(function(){
-			",Com,"All",Rm,"();
-			message(true,'",Com," All ",Rm,"...')
-	});
-
-"]
-end
-|jsAll(Rooms,Com)];
-jsAll([],_) -> [].
-
-%%
-
-ifcomcopy(Rm,Com) ->
-["
-	$('#",Com,"All",Rm,"').click(function(){
-		if($('#",Com,"AllInput",Rm,"').val().length){
-			",Com,"All",Rm,"();
-			message(true,'",Com," All ",Rm,"...')
-		} else {
-            $('#",Com,"AllInput",Rm,"').val('!');
-			message(true,'",Com," All ",Rm," is blank!')
-		}
-	});
-
-"].
-
-%%
-
-jsAllConfirm([Room|Rooms],Com) ->
-	[Rm|_]=Room,
-	[
-"
-
-	$('#"++Com++"All"++Rm++"').click(function(){
-        rall=confirm('"++Com++" All Systems "++Rm++"?');
-        if (rall==true)
-		    "++Com++"All"++Rm++"()
-        else
-		    message(true,'"++Com++" All in "++Rm++" aborted...')
-	});
-
-"|jsAllConfirm(Rooms,Com)];
-jsAllConfirm([],_) -> [].
-
-%%
-
-mkjsAllSelect_copy([Room|Rooms]) ->
-	[mkjsAllSelectRm_copy(Room)|mkjsAllSelect_copy(Rooms)];
-mkjsAllSelect_copy([]) ->
-    [].
-
-mkjsAllSelectRm_copy([Room|Rows]) ->
-	[
-"
-
-$('#copyAllSelect"++Room++"').change(function(){
-
-    $('#copyAllInput"++Room++"').val($('#copyAllSelect"++Room++" option:selected').text());
-    ", jsAllSelectRows_copy(Rows), "
-});
-
-"].
-
-jsAllSelectRows_copy([Row|Rows]) ->
-	[jsAllSelect_copy(Row)|jsAllSelectRows_copy(Rows)];
-jsAllSelectRows_copy([]) ->
-    [].
-
-jsAllSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
-	case Wk of
-		"." ->	jsAllSelect_copy(Wks);
-		   _ ->
-			Rm=string:sub_string(Wk,1,6),
-			[
-"
-    if(
-        ($('#copyAll",Rm,"check').prop('checked') && $('#",Wk,"check').prop('checked')) ||
-        (!$('#copyAll",Rm,"check').prop('checked') && 
-            (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
-      )
-        $('#copystr_",Wk,"').val($('#copyAllInput"++Rm++"').val());
-"|jsAllSelect_copy(Wks)]
-	end;
-jsAllSelect_copy([]) ->
-	[].
-%%
-
-mkjsSelect_copy([Room|Rooms]) ->
-	[mkjsSelectRm_copy(Room)|mkjsSelect_copy(Rooms)];
-mkjsSelect_copy([]) ->
-    [].
-
-mkjsSelectRm_copy([_Room|Rows]) ->
-   jsSelectRows_copy(Rows).
-
-jsSelectRows_copy([Row|Rows]) ->
-	[jsSelect_copy(Row)|jsSelectRows_copy(Rows)];
-jsSelectRows_copy([]) ->
-    [].
-
-jsSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
-	case Wk of
-		"." ->	jsSelect_copy(Wks);
-		   _ ->
-			[
-"
-
-$('#select"++Wk++"').change(function(){
-    $('#copystr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
-});
-
-"|jsSelect_copy(Wks)]
-	end;
-jsSelect_copy([]) ->
-	[].
-
-%%
-
-mkjsAllSelect_com([Room|Rooms]) ->
-	[mkjsAllSelectRm_com(Room)|mkjsAllSelect_com(Rooms)];
-mkjsAllSelect_com([]) ->
-    [].
-
-mkjsAllSelectRm_com([Room|Rows]) ->
-	[
-"
-
-$('#comAllSelect"++Room++"').change(function(){
-
-    $('#comAllInput"++Room++"').val($('#comAllSelect"++Room++" option:selected').text());
-    ", jsAllSelectRows_com(Rows), "
-});
-
-"].
-
-jsAllSelectRows_com([Row|Rows]) ->
-	[jsAllSelect_com(Row)|jsAllSelectRows_com(Rows)];
-jsAllSelectRows_com([]) ->
-    [].
-
-jsAllSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
-	case Wk of
-		"." ->	jsAllSelect_com(Wks);
-		   _ ->
-			Rm=string:sub_string(Wk,1,6),
-			[
-"
-    if(
-        ($('#comAll",Rm,"check').prop('checked') && $('#",Wk,"check').prop('checked')) ||
-        (!$('#comAll",Rm,"check').prop('checked') && 
-            (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
-      )
-        $('#comstr_",Wk,"').val($('#comAllInput"++Rm++"').val());
-"|jsAllSelect_com(Wks)]
-	end;
-jsAllSelect_com([]) ->
-	[].
-%%
-
-mkjsSelect_com([Room|Rooms]) ->
-	[mkjsSelectRm_com(Room)|mkjsSelect_com(Rooms)];
-mkjsSelect_com([]) ->
-    [].
-
-mkjsSelectRm_com([_Room|Rows]) ->
-   jsSelectRows_com(Rows).
-
-jsSelectRows_com([Row|Rows]) ->
-	[jsSelect_com(Row)|jsSelectRows_com(Rows)];
-jsSelectRows_com([]) ->
-    [].
-
-jsSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
-	case Wk of
-		"." ->	jsSelect_com(Wks);
-		   _ ->
-			[
-"
-
-$('#select"++Wk++"').change(function(){
-    $('#comstr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
-});
-
-"|jsSelect_com(Wks)]
-	end;
-jsSelect_com([]) ->
-	[].
-
-%%
-
-mkAllRoomsComs(Coms) ->
-	mkARComs(?ROOMS,Coms).
-
-mkARComs([Room|Rooms],Coms) ->
-	[Rm|_]=Room,
-	["<div id='",Rm,"_coms' class='room'>"++mkARComsComs(Rm,Coms)++"</div>"|mkARComs(Rooms,Coms)];
-mkARComs([],_Coms) ->
-	[].
-
-mkARComsComs(Rm,[{Com,ComText}|Coms]) ->
-["
-<input id='",Com,"All",Rm,"check' type='checkbox' /></a>
- <a href=# id='",Com,"All",Rm,"' class='button' />",ComText,"</a>
-<br>
-"|mkARComsComs(Rm,Coms)];
-mkARComsComs(_Rm,[]) -> [].
-
-%%
-
-mkAllRoomsComsInput(Com) ->
-	mkARComsInput(?ROOMS,Com).
-
-mkARComsInput([Room|Rooms],ComT) ->
-    {Com,ComText}=ComT,
-	[Rm|_]=Room,
-	["
-
-<div id='",Rm,"_comsInput"++Com++"' class='room'>
-    "++mkARComsComsInput(Rm,ComT)++"
-</div>
-
-"|mkARComsInput(Rooms,{Com,ComText})];
-mkARComsInput([],_Com) ->
-   [].
-
-mkARComsComsInput(Rm,{Com,ComText}) ->
-["
-<input id='"++Com++"All"++Rm++"check' type='checkbox'  /></a>
- <a href=# id='"++Com++"All"++Rm++"' class='button' />",ComText,"</a><br> 
- <input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput' />
-<select id='"++Com++"AllSelect"++Rm++"'>
-    ",
-        case Com of
-            "copy" ->
-		        selections(?APPS);
-            "com" ->
-		        selections(?COMS)
-        end,
-"
-</select>
-
-"].
-
-%%
-
-mkRooms([Room|Rooms]) ->
-	[mkRoom(Room)|mkRooms(Rooms)];
-mkRooms([]) -> [].
-
-mkRoom([Room|Rows]) ->
-	[
-"
-
-<div id='",Room,"' class='room'>
-",mkRoomRows(Rows),"
-
-</div>
-
-"
-	].
-
-mkRoomRows([Row|Rows]) ->
-	[[
-	 "
-<div>",
-	 [divhc(Wks) || Wks <- Row],
-	 "
-</div>
-<div class='brk'></div>
-<div>",
-	 [divc(Wks) || Wks <- Row],
-	 "
-</div>
-<div class='brk'></div>"
-	]|mkRoomRows(Rows)];
-mkRoomRows([]) ->
-	[].
-
-divhc({Wk,Domain,MacAddr}) ->
-	case Wk of
-		"." ->	["<div class=\"hltd\">.</div>"];
-		   _ ->
-			["
-
-<div id='",Wk,"_hltd' class=\"hltd\">
-
-<div id='",Wk,"logged_on' class='logged_on'>.</div>
-
-<div class='chkbox'><input id='",Wk,"check' type='checkbox' class='checkbox' />",Wk,Domain,"</a></div> <div id='",Wk,"status' class='status'>Up</div>
+ mkARComsComsInput(Rm,{Com,ComText}) ->
+ ["
+
+ <div class='fl'>
+ <input id='"++Com++"All"++Rm++"check' type='checkbox' class='checkbox' /></a>
+  <a href=# id='"++Com++"All"++Rm++"' class='button' />",ComText,"</a>
+ <div class='brk'></div>
+  <input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput' class='fl'/>
+ <select id='"++Com++"AllSelect"++Rm++"' class='fl'>
+	 ",
+		 case Com of
+			 "copy" ->
+				 selections(?APPS);
+			 "com" ->
+				 selections(?COMS)
+		 end,
+ "
+ </select>
+ </div>
+ "].
+
+ %%
+
+ mkRooms([Room|Rooms]) ->
+	 [mkRoom(Room)|mkRooms(Rooms)];
+ mkRooms([]) -> [].
+
+ mkRoom([Room|Rows]) ->
+	 [
+ "
+
+ <div id='",Room,"' class='room'>
+ ",mkRoomRows(Rows),"
+
+ </div>
+
+ "
+	 ].
+
+ mkRoomRows([Row|Rows]) ->
+	 [[
+	  "
+ <div>",
+	  [divhc(Wks) || Wks <- Row],
+	  "
+ </div>
+ <div class='brk'></div>
+ <div>",
+	  [divc(Wks) || Wks <- Row],
+	  "
+ </div>
+ <div class='brk'></div>"
+	 ]|mkRoomRows(Rows)];
+ mkRoomRows([]) ->
+	 [].
+
+ divhc({Wk,Domain,MacAddr}) ->
+	 case Wk of
+		 "." ->	["<div class=\"hltd\">.</div>"];
+			_ ->
+			 ["
+
+ <div id='",Wk,"_hltd' class=\"hltd\">
+
+ <div id='",Wk,"logged_on' class='logged_on'>.</div>
+
+<div class='wkchk'><input id='",Wk,"check' type='checkbox' class='checkbox' /></div></a><div class='wk'>",Wk,Domain,"</div>
+<div id='",Wk,"status' class='status'>Up</div>
 
 <div class='brk'></div>
 
@@ -1386,7 +1396,7 @@ jsrefcons_rm([Rm|Rows]) ->
 	[
 "
 
-function refresh_cons_"++Rm++"(){
+function refresh_cons_",Rm,"(){
 ",
 	 jsrefcons_rows(Rows,Rm),
 "
@@ -1404,12 +1414,14 @@ jsrefcons_row([{Wk,_Domain,_Mac}|Wks],Rm) ->
 		   _ ->
 ["
 
-		$('#"++Wk++"dfstatus').css('color','cyan');
-		$('#"++Wk++"dfstatus').css('background-color','#006666');
-        $('#"++Wk++"logged_on').html('.');
-		$('#"++Wk++"status').css('color','red');
-		$('#"++Wk++"status').css('background-color','#550000');
-        $('#"++Wk++"logged_on').html('.');
+		$('#",Wk,"_hltd').css('background-color','#000');
+		$('#",Wk,"_ltd').css('background-color','#000');
+		$('#",Wk,"dfstatus').css('color','cyan');
+		$('#",Wk,"dfstatus').css('background-color','#006666');
+        $('#",Wk,"logged_on').html('.');
+		$('#",Wk,"status').css('color','red');
+		$('#",Wk,"status').css('background-color','#550000');
+        $('#",Wk,"logged_on').html('.');
 
 "
 |jsrefcons_row(Wks,Rm)]
