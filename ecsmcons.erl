@@ -334,8 +334,8 @@ init2(?ROOMS,Ref_cons_time),
 						case 'pong':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','green');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#005500');
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#888800');
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#888800');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#666600');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#666600');
 							message(sepcol,boxCom[0] + ': ' + 'pong');
 							break;
 					    case 'pang':
@@ -628,8 +628,9 @@ switcher(?ROOMS),
 					  $('#"++Rm++"_coms').show();
 					  $('#"++Rm++"_comsInputcopy').show();
 					  $('#"++Rm++"_comsInputcom').show();
-
+                      $('#"++Rm++"toggle').click();
 					  $('#"++Rm++"toggle').focus();
+
  "].
 
  %%
@@ -1382,7 +1383,7 @@ switcher([]) ->
 switcher_rm([Rm|_Rows]) ->
 	[
 "
-<a href=# id='"++Rm++"toggle' class='button rm_selected' />[0]-"++Rm++"</a>
+<a href=# id='"++Rm++"toggle' class='button1' />[0]-"++Rm++"</a>
 "].
 
 %
