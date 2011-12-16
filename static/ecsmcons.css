@@ -32,9 +32,9 @@ th.oth {font-size:18pt; text-align:center; border:1px solid #555555;}
 table { border-collapse:collapse;}
 input {width:100px;}
 
-#wrapper { width:1720px; margin:0 auto; border:1px solid #555555;}
+#wrapper { width:1655px; margin:0 auto; border:1px solid #555555;}
 
-#menu { width:1710px; background-color:#888; padding: 3px 5px 3px 5px; font-weight:bold; }
+#menu { width:1650px; background-color:#888; padding: 3px 0 3px 5px; font-weight:bold; }
 
 #rooms_title { float:left; padding: 3px 3px 3px 3px; }
 
@@ -65,7 +65,7 @@ input {width:100px;}
 .logged_on { color:green; background-color:#333; width:265px; text-align:center; margin:0 auto; }
 
 .line2 { float:left; width:257px; background-color:#333; padding:0px 5px 0px 5px; margin:0 auto;}
-.status { float:left; color:red; background-color:#333; width:100px; text-align:center; }
+.status { float:left; color:red; background-color:#333; width:100px; text-align:center; padding:3px 0 3px; 0;}
 .dfstatus { float:left; color:aquamarine; background-color:#333; width:100px; text-align:center; }
 
 .error {color:red;}
@@ -81,16 +81,16 @@ a.button { text-decoration:none; padding: 0 2px 0 2px; }
 .rc { padding: 0 0 0 5px; border-left: 1px solid #00aaaa;}
 .lc { padding: 0 5px 0 0;}
 
-.macaddr { float:left; width:155px; background-color:#454545;  padding:0px 5px 0px 5px;}
+.macaddr { float:left; width:155px; background-color:#454545;  padding:0 5px 0 5px;}
 
-.rm_selected { background-color:#666; color:#aa0000;}
+.rm_selected { background-color:#666; color:#bbbbbb;}
 .rm_not_selected { background-color:#000; color:#00aaaa;}
 
 .room {display:none;}
 .ttop {width:100%;}
 
-.wkchk { float:left; height:18px; background-color:#454545; }
-.wk { float:left; width:150px; background-color:#454545; }
+.wkchk { float:left; height:18px; background-color:#454545; padding:3px 0 3px; 0;}
+.wk { float:left; width:150px; background-color:#454545; padding:3px 0 3px; 0;}
 
 .checkbox
 {
