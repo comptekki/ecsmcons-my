@@ -81,7 +81,7 @@ a.button { text-decoration:none; padding: 0 2px 0 2px; }
 .rc { padding: 0 0 0 5px; border-left: 1px solid #00aaaa;}
 .lc { padding: 0 5px 0 0;}
 
-.macaddr { float:left; width:153px; background-color:#454545;  padding:0px 5px 0px 5px;}
+.macaddr { float:left; width:155px; background-color:#454545;  padding:0px 5px 0px 5px;}
 
 .rm_selected { background-color:#666; color:#aa0000;}
 .rm_not_selected { background-color:#000; color:#00aaaa;}
@@ -90,7 +90,7 @@ a.button { text-decoration:none; padding: 0 2px 0 2px; }
 .ttop {width:100%;}
 
 .wkchk { float:left; height:18px; background-color:#454545; }
-.wk { float:left; width:148px; background-color:#454545; }
+.wk { float:left; width:150px; background-color:#454545; }
 
 .checkbox
 {
