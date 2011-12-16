@@ -83,7 +83,7 @@ a.button { text-decoration:none; padding: 0 2px 0 2px; }
 
 .macaddr { float:left; width:155px; background-color:#454545;  padding:0 5px 0 5px;}
 
-.rm_selected { background-color:#666; color:#bbbbbb;}
+.rm_selected { background-color:#444; color:#bbbbbb;}
 .rm_not_selected { background-color:#000; color:#00aaaa;}
 
 .room {display:none;}
