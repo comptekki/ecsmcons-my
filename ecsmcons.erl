@@ -347,6 +347,8 @@ init2(?ROOMS,Ref_cons_time),
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
                             $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#005555');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#005555');
 							break;
 					    case 'shutdown':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
@@ -362,6 +364,8 @@ init2(?ROOMS,Ref_cons_time),
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
                             $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#005555');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#005555');
 							break;
 					    case 'dfthaw':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'dfstatus').css('color','green');
@@ -370,6 +374,8 @@ init2(?ROOMS,Ref_cons_time),
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
                             $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#005555');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#005555');
 							break;
 					    case 'dfstatus':
 							if(!(boxCom[2].indexOf('thawed'))){
