@@ -33,8 +33,9 @@
 
 -include("ecsmcons.hrl").
 
--define(COMS, ["","chrome","firefox","disable_search","gp"]).
--define(APPS, ["","chrome.msi","firefox.exe"]).
+-define(APPS, ["","arcgis10sp3.msp","chrome.msi","ecom.beam","firefox.exe"]).
+-define(COMS, ["","arcgis","chrome","disable_search","firefox","gp"]).
+
 
 app_start() ->
 	application:start(ecsmcons).
