@@ -87,6 +87,8 @@ process_msg(Box, Com, Args, Msg_PID) ->
 %           [Msg_PID ! {ok, F} || F <- filelib:wildcard("/erl/*")];
 		"com" ->
 			case Args of
+				"arcgis" ->
+					os:cmd("c:/windows/system32/msiexec /p arcgis10sp3.msp");
 				"firefox" ->
 					os:cmd("c:/erl/firefox.exe -ms");
 				"chrome" ->
