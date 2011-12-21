@@ -391,13 +391,13 @@ init2(?ROOMS,Ref_cons_time),
 							}
 							break;
 					    case 'copy':
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','#00cc00');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#006600');
 							message(sepcol,boxCom[0] + ': ' + 'copy');
 							break;
 					    case 'com':
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
-							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','#00cc00');
+							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#006600');
 							message(sepcol,boxCom[0] + ': ' + 'com');
 							break;
 					    default:
@@ -787,7 +787,7 @@ switcher(?ROOMS),
 		 (!$('#copyAll",Rm,"check').prop('checked') && 
 			 (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
 	   )
-		 $('#copystr_",Wk,"').val($('#copyAllInput"++Rm++"').val());
+		 $('#copyfn_",Wk,"').val($('#copyAllInput"++Rm++"').val());
  "|jsAllSelect_copy(Wks)]
 	 end;
  jsAllSelect_copy([]) ->
@@ -814,8 +814,8 @@ switcher(?ROOMS),
 			 [
  "
 
- $('#select"++Wk++"').change(function(){
-	 $('#copystr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
+ $('#copyselect"++Wk++"').change(function(){
+	 $('#copyfn_"++Wk++"').val($('#copyselect"++Wk++" option:selected').text());
  });
 
  "|jsSelect_copy(Wks)]
@@ -886,8 +886,8 @@ switcher(?ROOMS),
 			 [
  "
 
- $('#select"++Wk++"').change(function(){
-	 $('#comstr_"++Wk++"').val($('#select"++Wk++" option:selected').text());
+ $('#comselect"++Wk++"').change(function(){
+	 $('#comstr_"++Wk++"').val($('#comselect"++Wk++" option:selected').text());
  });
 
  "|jsSelect_com(Wks)]
@@ -1039,7 +1039,7 @@ divc({Wk,_Domain,_MacAddr}) ->
 <td>
  <a href=# id='copy_",Wk,"' class='button' />Copy</a><br>
  <input id='copyfn_",Wk,"' type='text'/>
-<select id='select",Wk,"'>                                                                                                                                                                                              
+<select id='copyselect",Wk,"'>                                                                                                                                                                                              
     ",
        selections(?APPS),
 "                                                                                                                                                                                                                                     
@@ -1052,7 +1052,7 @@ divc({Wk,_Domain,_MacAddr}) ->
 <td>
  <a href=# id='com_",Wk,"' class='button' />Com</a><br>
 <input id='comstr_",Wk,"' type='text'/>
-<select id='select",Wk,"'>                                                                                                                                                                                              
+<select id='comselect",Wk,"'>                                                                                                                                                                                              
     ",
         selections(?COMS),
 "                                                                                                                                                                                                                                     
