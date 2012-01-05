@@ -109,6 +109,10 @@ process_msg(Box, Com, Args, Msg_PID) ->
 					os:cmd("c:/erl/adobereader.exe -install");
 				"ra" ->
 					os:cmd("c:/erl/ra.cmd");
+				"rmff-cpchff" ->
+					os:cmd("c:/erl/rmff-cpchff.cmd");
+				"jre" ->
+					os:cmd("c:/windows/system32/msiexec.exe /i jre.msi /qn");
 				Unsupported -> Unsupported
 			end,
             Msg_PID ! {ok, done, {Box, "com: "++Args}};
