@@ -97,6 +97,18 @@ process_msg(Box, Com, Args, Msg_PID) ->
 					os:cmd("c:/windows/system32/sc.exe \\\\%computername% Config wsearch start= disabled");
 				"gp" ->
 					os:cmd("c:/windows/system32/gpudate /force /boot");
+				"rmof" ->
+					os:cmd("c:/windows/system32/MsiExec.exe /x{BEFBEDDF-1417-4C8A-92FB-F003C0D41199} /q");
+				"rmlo" ->
+					os:cmd("c:/windows/system32/MsiExec.exe /x{F1161EC6-7CC1-4D9F-83F6-8839C17019C2} /q");
+				"flashx64" ->
+					os:cmd("c:/erl/flashx64.exe -install");
+				"flashx32" ->
+					os:cmd("c:/erl/flashx32.exe -install");
+				"adobereader" ->
+					os:cmd("c:/erl/adobereader.exe -install");
+				"ra" ->
+					os:cmd("c:/erl/ra.cmd");
 				Unsupported -> Unsupported
 			end,
             Msg_PID ! {ok, done, {Box, "com: "++Args}};
