@@ -32,15 +32,15 @@ th.oth {font-size:18pt; text-align:center; border:1px solid #555555;}
 table { border-collapse:collapse;}
 input {width:100px;}
 
-#wrapper { width:1660px; margin:0 auto; border:1px solid #555555;}
+#wrapper { width:1740px; margin:0 auto; border:1px solid #555555;}
 
-#menu { width:1655px; background-color:#888; padding: 3px 0 3px 5px; font-weight:bold; }
+#menu { width:1735px; background-color:#888; padding: 3px 0 3px 5px; font-weight:bold; }
 
 #rooms_title { float:left; padding: 3px 3px 3px 3px; }
 
 #switcher { padding: 3px 3px 3px 3px; }
 
-#commands { height:260px; width:1655px; background-color:#444; padding: 3px 3px 3px 3px; }
+#commands { height:260px; width:1735px; background-color:#444; padding: 3px 3px 3px 3px; }
 
 #tcoms { float:left; height:240px; background-color:#333; padding: 3px 3px 3px 3px; margin:0 3px 0 0; }
 
