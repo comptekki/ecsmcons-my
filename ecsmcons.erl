@@ -33,8 +33,8 @@
 
 -include("ecsmcons.hrl").
 
--define(APPS, ["","adobereader.exe","arcgis10sp3.msp","chrome.msi","flashx32.exe","flashx64.exe","ecom.beam","firefox.exe","ra.cmd"]).
--define(COMS, ["","adobereader","arcgis","chrome","disable_search","firefox","flashx32","flashx64","gp","ra","rmlo","rmof"]).
+-define(APPS, ["","adobereader.exe","arcgis10sp3.msp","chrome.msi","flashx32.exe","flashx64.exe","ecom.beam","firefox.exe","ra.cmd","Google Chrome - QCLabs.lnk","Mozilla Firefox - QCLabs.lnk","rmff-cpchff.cmd", "jre.exe"]).
+-define(COMS, ["","adobereader","arcgis","chrome","disable_search","firefox","flashx32","flashx64","gp","jre","ra","rmlo","rmof","rmff-cpchff"]).
 
 
 app_start() ->
