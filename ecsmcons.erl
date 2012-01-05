@@ -943,7 +943,7 @@ switcher(?ROOMS),
  <input id='"++Com++"All"++Rm++"check' type='checkbox' class='checkbox' /></a>
   <a href=# id='"++Com++"All"++Rm++"' class='button' />",ComText,"</a>
  <div class='brk'></div>
-  <input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput' class='fl'/>
+
  <select id='"++Com++"AllSelect"++Rm++"' class='fl'>
 	 ",
 		 case Com of
@@ -954,6 +954,9 @@ switcher(?ROOMS),
 		 end,
  "
  </select>
+<br>
+  <input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput' class='fl'/>
+
  </div>
  "].
 
@@ -1038,25 +1041,28 @@ divc({Wk,_Domain,_MacAddr}) ->
 <tr>
 <td>
  <a href=# id='copy_",Wk,"' class='button' />Copy</a><br>
- <input id='copyfn_",Wk,"' type='text'/>
+
 <select id='copyselect",Wk,"'>                                                                                                                                                                                              
     ",
        selections(?APPS),
 "                                                                                                                                                                                                                                     
 </select>
-
+<br>
+ <input id='copyfn_",Wk,"' type='text'/>
 </td>
 </tr>
 
 <tr>
 <td>
  <a href=# id='com_",Wk,"' class='button' />Com</a><br>
-<input id='comstr_",Wk,"' type='text'/>
+
 <select id='comselect",Wk,"'>                                                                                                                                                                                              
     ",
         selections(?COMS),
 "                                                                                                                                                                                                                                     
 </select>
+<br>
+<input id='comstr_",Wk,"' type='text'/>
 </td>
 </tr>
 
