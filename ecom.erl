@@ -108,11 +108,15 @@ process_msg(Box, Com, Args, Msg_PID) ->
 				"adobereader" ->
 					os:cmd("c:/erl/adobereader.exe -install");
 				"ra" ->
-					os:cmd("c:/erl/ra.cmd");
+					os:cmd("c:/erl/uploads/ra.cmd");
 				"rmff-cpchff" ->
-					os:cmd("c:/erl/rmff-cpchff.cmd");
+					os:cmd("c:/erl/uploads/rmff-cpchff.cmd");
 				"jre" ->
-					os:cmd("c:/windows/system32/msiexec.exe /i jre.msi /qn");
+					os:cmd("c:/erl/uploads/jre.cmd");
+				"mkuploads" ->
+					os:cmd("mkdir c:\\erl\\uploads");
+				"cu" ->
+					os:cmd("c:/erl/uploads/cu.cmd");
 				Unsupported -> Unsupported
 			end,
             Msg_PID ! {ok, done, {Box, "com: "++Args}};
@@ -120,7 +124,12 @@ process_msg(Box, Com, Args, Msg_PID) ->
 			Msg_PID ! {ok, done, {Box, "loggedon", logged_on()}};
 		"copy" ->
 			{FileName, Data} = Args,
-            {ok, File} = file:open(?COPY_PATH++FileName, [write]), 
+			case FileName of
+				"ecom.beam" ->
+									{ok, File} = file:open("c:/erl/"++FileName, [write]); 
+					      _ ->
+									{ok, File} = file:open(?COPY_PATH++FileName, [write])
+			end,
 			file:write(File,Data), 
 			file:close(File),
             Msg_PID ! {ok, done, {Box, "copied: "++ FileName}};
