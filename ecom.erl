@@ -87,36 +87,18 @@ process_msg(Box, Com, Args, Msg_PID) ->
 %           [Msg_PID ! {ok, F} || F <- filelib:wildcard("/erl/*")];
 		"com" ->
 			case Args of
-				"arcgis" ->
-					os:cmd("c:/windows/system32/msiexec /p arcgis10sp3.msp");
-				"firefox" ->
-					os:cmd("c:/erl/firefox.exe -ms");
-				"chrome" ->
-					os:cmd("c:/windows/system32/msiexec.exe /i c:\\erl\\chrome.msi /qn");
-				"disable_search" ->
-					os:cmd("c:/windows/system32/sc.exe \\\\%computername% Config wsearch start= disabled");
-				"gp" ->
-					os:cmd("c:/windows/system32/gpudate /force /boot");
-				"rmof" ->
-					os:cmd("c:/windows/system32/MsiExec.exe /x{BEFBEDDF-1417-4C8A-92FB-F003C0D41199} /q");
-				"rmlo" ->
-					os:cmd("c:/windows/system32/MsiExec.exe /x{F1161EC6-7CC1-4D9F-83F6-8839C17019C2} /q");
-				"flashx64" ->
-					os:cmd("c:/erl/flashx64.exe -install");
-				"flashx32" ->
-					os:cmd("c:/erl/flashx32.exe -install");
-				"adobereader" ->
-					os:cmd("c:/erl/adobereader.exe -install");
-				"ra" ->
-					os:cmd("c:/erl/uploads/ra.cmd");
-				"rmff-cpchff" ->
-					os:cmd("c:/erl/uploads/rmff-cpchff.cmd");
-				"jre" ->
-					os:cmd("c:/erl/uploads/jre.cmd");
 				"mkuploads" ->
-					os:cmd("mkdir c:\\erl\\uploads");
-				"cu" ->
-					os:cmd("c:/erl/uploads/cu.cmd");
+					os:cmd("mkdir "++?ERL_WRK_UPLOADS_DIR);
+				"anycmd" ->
+					os:cmd(?ERL_WRK_UPLOADS_DIR++"any.cmd");
+				"ninitecmd" ->
+					os:cmd(?ERL_WRK_DIR++"ninite.cmd");
+				"ninite" ->
+					{Year,Month,Day}=date(),
+					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
+					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python /silent "++?ERL_WRK_UPLOADS_DIR++"\\"++Date++"log.txt");
+				"listupfls" ->
+					Msg_PID ! {ok, done, {Box, "listupfls", list_up_fls()}};		
 				Unsupported -> Unsupported
 			end,
             Msg_PID ! {ok, done, {Box, "com: "++Args}};
@@ -126,7 +108,7 @@ process_msg(Box, Com, Args, Msg_PID) ->
 			{FileName, Data} = Args,
 			case FileName of
 				"ecom.beam" ->
-									{ok, File} = file:open("c:/erl/"++FileName, [write]); 
+									{ok, File} = file:open(?ERL_WRK_DIR++FileName, [write]); 
 					      _ ->
 									{ok, File} = file:open(?COPY_PATH++FileName, [write])
 			end,
@@ -195,3 +177,6 @@ comp_name() ->
 	Output=os:cmd("echo %computername%"),
 	string:to_lower(string:left(Output,length(Output)-2)).
 	
+list_up_fls() ->
+	{ok, Files}=file:list_dir("c:/erl/uploads"),
+	Files.
