@@ -33,8 +33,8 @@
 
 -include("ecsmcons.hrl").
 
--define(APPS, ["","adobereader.exe","arcgis10sp3.msp","chrome.msi","flashx32.exe","flashx64.exe","ecom.beam","firefox.exe","ra.cmd","Google Chrome - QCLabs.lnk","Mozilla Firefox - QCLabs.lnk","rmff-cpchff.cmd","jre.cmd","jre.zip","cu.cmd"]).
--define(COMS, ["","adobereader","arcgis","chrome","disable_search","firefox","flashx32","flashx64","gp","jre","mkuploads","ra","rmlo","rmof","rmff-cpchff","cu"]).
+-define(APPS, ["","adobereader.exe","arcgis10sp3.msp","chrome.msi","flashx32.exe","flashx64.exe","ecom.beam","firefox.exe","Google Chrome - QCLabs.lnk","Mozilla Firefox - QCLabs.lnk","sim.msi","eq32.msi","eq64.msi","NiniteOne.exe","ninite.cmd","any.cmd"]).
+-define(COMS, ["","mkuploads","ninite","ninitecmd","listupfls","anycmd"]).
 
 
 app_start() ->
