@@ -98,11 +98,28 @@ Client/Server Setup
 % define whether server or client - true=server, false=client
 -define(SERVER,	true).
 
-% path to erl uploads directory
+
 -define(ERL_WRK_DIR,"\\erl\\").
 
 % path to erl uploads directory
 -define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads\\").
+
+
+% paths below define where the erl and erl uploads directories are
+
+% add the folling lines to control compile options for ecom.erl server or client version
+
+% uncomment the following line to compile for client.
+%-define(IS_CLIENT,true).                                                                                                                                                                     
+-ifdef(IS_CLIENT).
+-define(SERVER,true).
+-define(ERL_WRK_DIR,"c:\\erl-path\\").
+-define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads\\").
+-else.
+-define(SERVER,false).
+-define(ERL_WRK_DIR,"/path/to/ecsmcons/").
+-define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads/").
+-endif.
 
 	 iii. create ecsmcons.conf
 
@@ -151,10 +168,10 @@ Client/Server Setup
 
 	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -s ec app_start -run ecom
 
-3. Windows setup
+2. Windows setup
 
    a. copy ecom.beam to something like c:\erl on a windows system (erlang must also be installed on windows system)
-   b. set path to include erlang (location of erl.exe)
+   b. set windows system environment variable "Path" to include erlang (location of erl.exe)
    c. install erlang as a service
    	  i. per http://www.erlang.org/doc/man/erlsrv.html something like this:
 
@@ -172,6 +189,7 @@ Versions
 -Add -define(ERL_WRK_DIR,"\\erl\\"). in ecsmcons.hrl
 -Add -define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads\\"). in ecsmcons.hrl
 -Restructure coms to mostly work through anycmd command option (i.e., most commands work through a custom built .cmd script)
+-Add client/server compile option in ecom.hrl
 
 1.2
 
