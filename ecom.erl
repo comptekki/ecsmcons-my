@@ -88,7 +88,8 @@ process_msg(Box, Com, Args, Msg_PID) ->
 		"com" ->
 			case Args of
 				"mkuploads" ->
-					os:cmd("mkdir "++?ERL_WRK_UPLOADS_DIR);
+					os:cmd("mkdir "++?ERL_WRK_UPLOADS_DIR),
+					Msg_PID ! {ok, done, {Box, "mkdir "++?ERL_WRK_UPLOADS_DIR}};
 				"anycmd" ->
 					os:cmd(?ERL_WRK_UPLOADS_DIR++"any.cmd");
 				"ninitecmd" ->
