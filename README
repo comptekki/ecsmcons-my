@@ -186,7 +186,6 @@ Versions
 1.3
 
 -Restructure coms to mostly work through anycmd command option (i.e., most commands work through a custom built .cmd script)
--Add client/server compile option in ecom.hrl
 -Add ecomsrv.erl for server side
 
 1.2
