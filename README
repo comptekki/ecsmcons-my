@@ -47,7 +47,10 @@ Client/Server Setup
 
 1. Server Setup
    a. erl file setup
-   	  i. ec.hrl file set up as follow:
+   	  i. ecsmcons.hrl file set up as follow:
+
+% define IP for wol broadcast
+-define(BROADCAST_ADDR, {192,168,0,255}).
 
 % server
 -define(SERVER, 'node@host').
@@ -77,49 +80,20 @@ Client/Server Setup
 % domain of clients
 -define(DOMAIN, "my.domain").
 
-% define IP for wol broadcast
--define(BROADCAST_ADDR, {192,168,0,255}).
-
 % define location of deepfreeze on workstation
--define(DFC_PATH, "C:/Windows/SysWOW64/dfc.exe").
+-define(DFC_DIR, "C:/Windows/SysWOW64/dfc.exe").
 
 % define deefreeze command line password
 -define(DFC_PASSWD, "deepfreeze").
 
 % define erl path for client code
--define(COPY_PATH, "c:/erl/").
+-define(UPLOADS_DIR, "c:/erl/uploads").
 
 % define location of windows users
--define(USERS_PATH, "c:/users").
+-define(USERS_DIR, "c:/users").
 
 % define list of files/folders you don't want to have returned by logged on function
 -define(USERS, ["Public","desktop.ini","Default","Default User","All Users"]).
-
-% define whether server or client - true=server, false=client
--define(SERVER,	true).
-
-
--define(ERL_WRK_DIR,"\\erl\\").
-
-% path to erl uploads directory
--define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads\\").
-
-
-% paths below define where the erl and erl uploads directories are
-
-% add the folling lines to control compile options for ecom.erl server or client version
-
-% uncomment the following line to compile for client.
-%-define(IS_CLIENT,true).                                                                                                                                                                     
--ifdef(IS_CLIENT).
--define(SERVER,true).
--define(ERL_WRK_DIR,"c:\\erl-path\\").
--define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads\\").
--else.
--define(SERVER,false).
--define(ERL_WRK_DIR,"/path/to/ecsmcons/").
--define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads/").
--endif.
 
 	 iii. create ecsmcons.conf
 
@@ -128,19 +102,44 @@ Client/Server Setup
 {on,[{"test","test"},{"test2","test2"}]}. % username/password: on/off and username and password
 {60*60}. % cookie max age in seconds
 
-   	  iv. compile ecsmcons.erl and ecom.erl, i.e. erlc ecsmcons.erl and erlc ecom.erl
+   	  iv. compile ecsmcons.erl and ecom.erl, ecomsrv.erl, i.e. erlc ecsmcons.erl and erlc ecom.erl and erlc ecomsrv.erl
 
-   b. run these commands from bash shell:
+   b. create ecsmcons.app  if command line app_start is used below
 
-	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -run ecom
+    for HTTP create this:
+
+{application, ecsmcons,
+ [{description, "Erlang Computer Systems Management CONSole"},
+  {vsn, "1.3"},
+  {modules, [ecsmcons]},
+  {registered, [ecsmcons]},
+  {applications, [kernel, stdlib]},
+  {mod, {ecsmcons, [8080]}}
+ ]}.
+
+    for HTTPS create this:
+
+{application, ecsmcons,
+ [{description, "Erlang Computer Systems Management CONSole"},
+  {vsn, "1.3"},
+  {modules, [ecsmcons]},
+  {registered, [ecsmcons]},
+  {applications, [kernel, stdlib]},
+  {mod, {ecsmcons, [8443]}}
+ ]}.
+
+
+   c. run these commands from bash shell:
+
+	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin
 
 	  Then in the erlang vm run:
 
 	  ecsmcons:a().
 
-	  This will start misultin on port 9090
+	  This will start misultin on port 8080
 
-	  use browser to access http://localhost:9090
+	  use browser to access http://localhost:8080
 	  
 	  or
 
@@ -148,13 +147,13 @@ Client/Server Setup
 
 	  for SSL.  SSL will be attempted if 443 is in the port number.
 
-	  This will start misultin on port 9443
+	  This will start misultin on port 8443
 
-	  use browser to access https://localhost:9443
+	  use browser to access https://localhost:8443
 
 	  or
 
-	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -run ecom
+	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin
 
 	  then in the erlang VM shell:
 
@@ -166,7 +165,7 @@ Client/Server Setup
 
 	  to run on command-line:
 
-	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -s ec app_start -run ecom
+	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -s ecsmcons app_start
 
 2. Windows setup
 
@@ -186,10 +185,9 @@ Versions
 --------
 1.3
 
--Add -define(ERL_WRK_DIR,"\\erl\\"). in ecsmcons.hrl
--Add -define(ERL_WRK_UPLOADS_DIR,?ERL_WRK_DIR++"uploads\\"). in ecsmcons.hrl
 -Restructure coms to mostly work through anycmd command option (i.e., most commands work through a custom built .cmd script)
 -Add client/server compile option in ecom.hrl
+-Add ecomsrv.erl for server side
 
 1.2
 
