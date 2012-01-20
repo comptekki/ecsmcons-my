@@ -1,5 +1,5 @@
 Erlang Computer Systems Management CONSole (or ECSMCons)
-Version 1.3
+Version 1.4
 
 ECSMCons is an Erlang based client/server computer systems 
 management console in which a web browser (with websockets
@@ -183,6 +183,10 @@ Client/Server Setup
 
 Versions
 --------
+1.4
+
+-
+
 1.3
 
 -Restructure coms to mostly work through anycmd command option (i.e., most commands work through a custom built .cmd script)
