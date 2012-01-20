@@ -33,7 +33,7 @@
 
 -include("ecsmcons.hrl").
 
--define(APPS, ["","adobereader.exe","arcgis10sp3.msp","chrome.msi","flashx32.exe","flashx64.exe","ecom.beam","firefox.exe","Google Chrome - QCLabs.lnk","Mozilla Firefox - QCLabs.lnk","sim.msi","eq32.msi","eq64.msi","NiniteOne.exe","ninite.cmd","any.cmd"]).
+-define(APPS, ["","any.cmd","any.exe","any.msi","any.msp","any.reg","ecom.beam","Google Chrome - QCLabs.lnk","Mozilla Firefox - QCLabs.lnk","NiniteOne.exe","ninite.cmd"]).
 -define(COMS, ["","mkuploads","ninite","ninitecmd","listupfls","anycmd"]).
 
 
@@ -41,9 +41,9 @@ app_start() ->
 	application:start(ecsmcons).
 
 a() ->
-	start0(9090).
+	start0(8080).
 s() ->
-	start_https(9443).
+	start_https(8443).
 
 %% start misultin http server
 start0(Port) when is_integer(Port) ->
@@ -56,16 +56,31 @@ start1(_Port) ->
 	[].
 
 start(_Type,[Port]) ->
-	misultin:start_link([
-						 {port, Port},
-						 {static, ?STATIC},
-						 {loop, fun(Req) -> handle_http(Req, Port) end},
-						 {ws_loop, fun(Ws) -> handle_websocket(Ws) end}
-						]).
+	case port_type(Port) of
+		http ->
+			start_http(Port);
+		https ->
+			start_https(Port)
+	end.
 
-%% stop misultin
-stop(_State) ->
-	misultin:stop().
+%% does port contain 443?
+port_type(Port) ->
+	case string:str(integer_to_list(Port),"443")>0 of
+		true ->
+			https;
+		_ ->
+			http
+	end.
+
+%%
+
+start_http(Port) ->
+	misultin:start_link([
+					 {port, Port},
+					 {static, ?STATIC},
+					 {loop, fun(Req) -> handle_http(Req, Port) end},
+					 {ws_loop, fun(Ws) -> handle_websocket(Ws) end}
+	]).
 
 %%
 
@@ -83,6 +98,10 @@ start_https(Port) ->
 		 {password, CertPasswd}
 		]}
 	  ]).
+
+%% stop misultin
+stop(_State) ->
+	misultin:stop().
 
 %%
 
@@ -187,7 +206,7 @@ handle('GET', ["login"], Req, _Port) ->
 ["<html>
 <head> 
 <title>ECSMCons Login</title>
-<script type='text/javascript' src='/static/jquery-1.6.4.min.js'></script>
+<script type='text/javascript' src='jquery-1.6.4.min.js'></script>
 <script>
 $(document).ready(function(){
 
@@ -260,8 +279,8 @@ handleMain(Req,Port) ->
 ["<html>
 <head> 
 <title>ECSMCons</title> 
-<link href='/static/ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
-<script type='text/javascript' src='/static/jquery-1.6.4.min.js'></script>
+<link href='ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
+<script type='text/javascript' src='jquery-1.6.4.min.js'></script>
 
 <script>
 
@@ -1461,17 +1480,17 @@ handle_websocket(Ws) ->
 					[Box,Com,Args]=Ldata,
 					case Com of
 						"com" ->
-							Res=ecom:send_com(Box, Com,Args,list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box, Com,Args,list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done com: ~p - args: ~p~n",[Box,Args]);
 						"loggedon" ->
-							Res=ecom:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done loggedon ~p - data2: ~p ~n",[Box, Data2]);
 						"copy" ->
 							case file:read_file(?UPLOADS++Args) of
 								{ok, DataBin} ->
-									Res=ecom:send_com(Box,Com,{Args,DataBin},list_to_atom(?NODE_NAME++Box)),
+									Res=ecomsrv:send_com(Box,Com,{Args,DataBin},list_to_atom(?NODE_NAME++Box)),
 									Data2=recData(Res),
 									io:format("~n done copy - ~p ~n",[Box]);
 								{error, Reason} ->
@@ -1479,42 +1498,48 @@ handle_websocket(Ws) ->
 									io:format("~n done copy - ~p - error: ~p~n",[Box, Reason])
 							end;
 						"dffreeze" ->
-							Res=ecom:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done dffreeze ~p - data2: ~p ~n",[Box, Data2]);
 						"dfthaw" ->
-							Res=ecom:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done dfthaw ~p - data2: ~p ~n",[Box, Data2]);
 						"dfstatus" ->
-							Res=ecom:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done dfstatus ~p - data2: ~p ~n",[Box, Data2]);
 						"net_restart" ->
-							Res=ecom:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done net_restart ~p - data2: ~p ~n",[Box, Data2]);
 						"net_stop" ->
-							Res=ecom:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done net_stop ~p - data2: ~p ~n",[Box, Data2]);
 						"reboot" ->
-							Res=ecom:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done reboot ~p - data2: ~p ~n",[Box, Data2]);
 						"shutdown" ->
-							Res=ecom:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
 							Data2=recData(Res),
 							io:format("~n done shutdown ~p - data2: ~p ~n",[Box, Data2]);
 						"wol" ->
 							MacList=string:tokens(Args,"-"),
 							Mac=string:join(MacList,":"),
-							ecom:send_com(Box,Com,Mac,?SERVER),
+							io:format("~n in wol .... args: ~p ~n",[Mac]),
+							MacAddrBin= <<<<(list_to_integer(X, 16))>> || X <- string:tokens(Mac, ":")>>,
+							io:format("~n macbin: ~p ~n",[MacAddrBin]),
+							MagicPacket= << (dup(<<16#FF>>, 6))/binary, (dup(MacAddrBin, 16))/binary >>,
+							{ok,S} = gen_udp:open(0, [{broadcast, true}]),
+							gen_udp:send(S, ?BROADCAST_ADDR, 9, MagicPacket),
+							gen_udp:close(S),
 							Data2="done wol: "++ Box ++ "....!",
 							io:format("~n done wol - ~p ~n",[Box]);
 						"ping" ->
 							%Res=net_adm:ping(list_to_atom(?NODE_NAME++Box)),
-							Res=ecom:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
+							Res=ecomsrv:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
 							%Data2=Box++":"++ atom_to_list(Res),
 							Data2=recData(Res),
 							io:format("~n done ping ~p - data2: ~p ~n",[Box, Data2]);
@@ -1546,3 +1571,9 @@ recData(Res) ->
 			{Box, Com, Res2}=Res,
 			string:join([Box,Com,Res2],":")  
 	end.
+
+dup(B,Acc) when Acc > 1 ->	
+    B2=dup(B, Acc-1),
+	<< B/binary,  B2/binary >>;
+dup(B,1) ->
+    B.
