@@ -29,21 +29,12 @@
 
 -module(ecom).
 
--export([start/0, d/1, u/0, p/1, send_com/2, send_com/4, rec_com/0]).
+-export([start/0, send_com/2, send_com/4, rec_com/0]).
 
 -include("ecom.hrl").
 
 start() ->
     register(rec_com, spawn(ecom, rec_com, [])).
-
-d(NodeAtHost)->	
-    {rec_com, NodeAtHost} ! {finished, self()}.
-
-u() ->
-    unregister(rec_com).
-
-p(NodeAtHost) ->
-    net_adm:ping(NodeAtHost).
 
 send_com(Box, Com, Args, Rec_Node) ->
     {rec_com, Rec_Node} ! {Box, Com, Args, self()},
@@ -71,14 +62,9 @@ rec_com() ->
             process_msg(Box, Com, Args, Msg_PID),
             rec_com()
 		after 60000 ->
-			case ?SERVER of
-				true ->
-					{hanwebs, ?NODE_AT_HOST} ! {comp_name()++?DOMAIN++"/pong",self()},
-					{hanwebs, ?NODE_AT_HOST} ! {comp_name()++?DOMAIN++"/loggedon/"++logged_on(),self()},
-					rec_com();
-				false ->
-					rec_com()
-		   end
+				{hanwebs, ?NODE_AT_HOST} ! {comp_name()++?DOMAIN++"/pong",self()},
+				{hanwebs, ?NODE_AT_HOST} ! {comp_name()++?DOMAIN++"/loggedon/"++logged_on(),self()},
+				rec_com()
     end.
 
 process_msg(Box, Com, Args, Msg_PID) ->
@@ -88,16 +74,16 @@ process_msg(Box, Com, Args, Msg_PID) ->
 		"com" ->
 			case Args of
 				"mkuploads" ->
-					os:cmd("mkdir "++?ERL_WRK_UPLOADS_DIR),
-					Msg_PID ! {ok, done, {Box, "mkdir "++?ERL_WRK_UPLOADS_DIR}};
+					os:cmd("mkdir "++?UPLOADS_DIR),
+					Msg_PID ! {ok, done, {Box, "mkdir "++?UPLOADS_DIR}};
 				"anycmd" ->
-					os:cmd(?ERL_WRK_UPLOADS_DIR++"any.cmd");
+					os:cmd(?UPLOADS_DIR++"any.cmd");
 				"ninitecmd" ->
-					os:cmd(?ERL_WRK_DIR++"ninite.cmd");
+					os:cmd(?UPLOADS_DIR++"ninite.cmd");
 				"ninite" ->
 					{Year,Month,Day}=date(),
 					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
-					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python /silent "++?ERL_WRK_UPLOADS_DIR++"\\"++Date++"log.txt");
+					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python /silent "++?UPLOADS_DIR++"\\"++Date++"log.txt");
 				"listupfls" ->
 					Msg_PID ! {ok, done, {Box, "listupfls", list_up_fls()}};		
 				Unsupported -> Unsupported
@@ -109,18 +95,18 @@ process_msg(Box, Com, Args, Msg_PID) ->
 			{FileName, Data} = Args,
 			case FileName of
 				"ecom.beam" ->
-									{ok, File} = file:open(?ERL_WRK_DIR++FileName, [write]); 
+									{ok, File} = file:open(?ERL_DIR++FileName, [write]); 
 					      _ ->
-									{ok, File} = file:open(?COPY_PATH++FileName, [write])
+									{ok, File} = file:open(?UPLOADS_DIR++FileName, [write])
 			end,
 			file:write(File,Data), 
 			file:close(File),
             Msg_PID ! {ok, done, {Box, "copied: "++ FileName}};
         "dffreeze" ->
-            os:cmd(?DFC_PATH++" "++?DFC_PASSWD++" /BOOTFROZEN"),
+            os:cmd(?DFC_DIR++" "++?DFC_PASSWD++" /BOOTFROZEN"),
             Msg_PID ! {ok, done, {Box, "dffreeze"}};
         "dfthaw" ->
-            os:cmd(?DFC_PATH++" "++?DFC_PASSWD++" /BOOTTHAWED"),
+            os:cmd(?DFC_DIR++" "++?DFC_PASSWD++" /BOOTTHAWED"),
             Msg_PID ! {ok, done, {Box, "dfthaw"}};
         "dfstatus" ->
             Output=os:cmd("C:/erl/df-status.cmd"),
@@ -140,27 +126,12 @@ process_msg(Box, Com, Args, Msg_PID) ->
 		"shutdown" ->
 			os:cmd("shutdown -s -t 0"),
 		    Msg_PID ! {ok, done, {Box, "shutdown"}};
-		"wol" ->
-io:format("~n in wol .... args: ~p ~n",[Args]),
-			MacAddrBin= <<<<(list_to_integer(X, 16))>> || X <- string:tokens(Args, ":")>>,
-io:format("~n macbin: ~p ~n",[MacAddrBin]),
-			MagicPacket= << (dup(<<16#FF>>, 6))/binary, (dup(MacAddrBin, 16))/binary >>,
-			{ok,S} = gen_udp:open(0, [{broadcast, true}]),
-			gen_udp:send(S, ?BROADCAST_ADDR, 9, MagicPacket),
-			gen_udp:close(S),
-			Msg_PID ! {ok, Com};
         _ ->
 			Msg_PID ! {ok, "Unknown command: " ++ "'" ++ Com ++ "'"}
     end.
 
-dup(B,Acc) when Acc > 1 ->	
-    B2=dup(B, Acc-1),
-	<< B/binary,  B2/binary >>;
-dup(B,1) ->
-    B.
-
 logged_on() ->
-	case file:list_dir(?USERS_PATH) of
+	case file:list_dir(?USERS_DIR) of
 		 {ok, UserDirs} -> get_user(UserDirs);
 		{error, Reason} -> atom_to_list(Reason)
 	end.
@@ -179,5 +150,5 @@ comp_name() ->
 	string:to_lower(string:left(Output,length(Output)-2)).
 	
 list_up_fls() ->
-	{ok, Files}=file:list_dir("c:/erl/uploads"),
+	{ok, Files}=file:list_dir(?UPLOADS_DIR),
 	Files.
