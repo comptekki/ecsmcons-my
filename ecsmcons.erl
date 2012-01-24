@@ -89,6 +89,7 @@ start_https(Port) ->
 	misultin:start_link(
 	  [
 	   {port, Port},
+	   {static, ?STATIC},
 	   {loop, fun(Req) -> handle_http(Req, Port) end},
 	   {ws_loop, fun(Ws) -> handle_websocket(Ws) end},
 	   {ssl,
@@ -206,7 +207,7 @@ handle('GET', ["login"], Req, _Port) ->
 ["<html>
 <head> 
 <title>ECSMCons Login</title>
-<script type='text/javascript' src='jquery-1.6.4.min.js'></script>
+<script type='text/javascript' src='/static/jquery-1.6.4.min.js'></script>
 <script>
 $(document).ready(function(){
 
@@ -279,8 +280,8 @@ handleMain(Req,Port) ->
 ["<html>
 <head> 
 <title>ECSMCons</title> 
-<link href='ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
-<script type='text/javascript' src='jquery-1.6.4.min.js'></script>
+<link href='/static/ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
+<script type='text/javascript' src='/static/jquery-1.6.4.min.js'></script>
 
 <script>
 
@@ -514,6 +515,8 @@ mkjsAllSelect_copy(?ROOMS),
 mkjsSelect_copy(?ROOMS),
 mkjsAllSelect_com(?ROOMS),
 mkjsSelect_com(?ROOMS),
+mkjsSelectAllChk(?ROOMS),
+mkjsUnselectAllChk(?ROOMS),
 mkcomButtons(?ROOMS),
 mkjsComAll(?ROOMS,"ping"),
 mkjsComAll(?ROOMS,"reboot"),
@@ -596,6 +599,7 @@ switcher(?ROOMS),
  ",
  mkAllRoomsComsInput({"copy","Copy All"}),
  mkAllRoomsComsInput({"com","Com All"}),
+ mkAllRoomsSelectUnselectAll(?ROOMS),
  "
  </div>
 
@@ -656,6 +660,9 @@ switcher(?ROOMS),
 					  $('#"++Rm++"_coms').show();
 					  $('#"++Rm++"_comsInputcopy').show();
 					  $('#"++Rm++"_comsInputcom').show();
+
+					  $('#"++Rm++"_selunselall').show();
+
                       $('#"++Rm++"toggle').click();
 					  $('#"++Rm++"toggle').focus();
 
@@ -693,6 +700,7 @@ switcher(?ROOMS),
 		 $('#"++Rm++"_coms').show();
 		 $('#"++Rm++"_comsInputcopy').show();
 		 $('#"++Rm++"_comsInputcom').show();
+ 	     $('#"++Rm++"_selunselall').show();
 		 $('#"++Rm++"toggle').removeClass('rm_selected');
 		 $('#"++Rm++"toggle').removeClass('rm_not_selected');
 		 $('#"++Rm++"toggle').addClass('rm_selected');
@@ -703,6 +711,7 @@ switcher(?ROOMS),
 		 $('#"++Room++"_coms').hide();
 		 $('#"++Room++"_comsInputcopy').hide();
 		 $('#"++Room++"_comsInputcom').hide();
+	     $('#"++Room++"_selunselall').hide();
 		 $('#"++Room++"toggle').removeClass('rm_selected');
 		 $('#"++Room++"toggle').removeClass('rm_not_selected');
 		 $('#"++Room++"toggle').addClass('rm_not_selected')
@@ -883,7 +892,8 @@ switcher(?ROOMS),
 	 end;
  jsAllSelect_com([]) ->
 	 [].
- %%
+ 
+%%
 
  mkjsSelect_com([Room|Rooms]) ->
 	 [mkjsSelectRm_com(Room)|mkjsSelect_com(Rooms)];
@@ -914,7 +924,38 @@ switcher(?ROOMS),
  jsSelect_com([]) ->
 	 [].
 
- %%
+%%
+
+ mkjsSelectAllChk([Room|Rooms]) ->
+	 [Rm|_]=Room,
+	 [
+"
+ $('#selectAll"++Rm++"').click(function(){
+     $('#"++Rm++" input:checkbox').each(function() {
+         $(this).attr('checked',!$(this).attr('checked'));
+     });
+ });
+
+"|mkjsSelectAllChk(Rooms)];
+ mkjsSelectAllChk([]) ->
+	 [].
+%%
+
+ mkjsUnselectAllChk([Room|Rooms]) ->
+	 [Rm|_]=Room,
+	 [
+"
+ $('#unselectAll"++Rm++"').click(function(){
+     $('#"++Rm++" input:checkbox').each(function() {
+         $(this).attr('checked',!$(this).attr('checked'));
+     });
+ });
+
+"|mkjsUnselectAllChk(Rooms)];
+ mkjsUnselectAllChk([]) ->
+	 [].
+
+%%
 
  mkAllRoomsComs(Coms) ->
 	 mkARComs(?ROOMS,Coms).
@@ -937,7 +978,7 @@ switcher(?ROOMS),
  "|mkARComsComs(Rm,Coms)];
  mkARComsComs(_Rm,[]) -> [].
 
- %%
+%%
 
  mkAllRoomsComsInput(Com) ->
 	 mkARComsInput(?ROOMS,Com).
@@ -977,6 +1018,29 @@ switcher(?ROOMS),
   <input id='"++Com++"AllInput"++Rm++"' type='text', name='"++Com++"AllInput' class='fl'/>
 
  </div>
+ "].
+
+%%
+
+mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
+	 [Rm|_]=Room,
+	 ["
+ <div class='brk'></div>
+
+ <div id='",Rm,"_selunselall' class='room'>
+<br>
+	 "++mkselunselAll(Rm)++"
+ </div>
+
+ "|mkAllRoomsSelectUnselectAll(Rooms)];
+ mkAllRoomsSelectUnselectAll([]) ->
+	[].
+
+ mkselunselAll(Rm) ->
+ ["
+  <a href=# id='selectAll"++Rm++"' class='button' />Select All</a><br>
+  <a href=# id='unselectAll"++Rm++"' class='button' />Unselect All</a>
+
  "].
 
  %%
@@ -1084,7 +1148,6 @@ divc({Wk,_Domain,_MacAddr}) ->
 <input id='comstr_",Wk,"' type='text'/>
 </td>
 </tr>
-
 </table>
 </div>
 "]
