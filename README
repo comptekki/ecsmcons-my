@@ -47,87 +47,20 @@ Client/Server Setup
 
 1. Server Setup
    a. erl file setup
+
    	  i. ecsmcons.hrl file set up as follow:
-
-% define IP for wol broadcast
--define(BROADCAST_ADDR, {192,168,0,255}).
-
-% server
--define(SERVER, 'node@host').
-% node name on clients (same for all)
--define(NODE_NAME, "node@").
-
-% rooms setup
--define(ROOMS,
-[
- ["Room1",
-   [{"row1-1", ".sub_domain.org","mac-address"},{"row1-2","sub_somain.org","mac-address"},{"row1-3","sub_somain.org","mac-address"},{"row1-4","sub_somain.org","mac-address"},{"row1-5","sub_somain.org","mac-address"}],
-   [{"row2-1","sub_somain.org","mac-address"},{"row2-2","sub_somain.org","mac-address"},{"row2-3","sub_somain.org","mac-address"},{"row2-4","sub_somain.org","mac-address"},{"row2-5","sub_somain.org","mac-address"}]
- ],
- ["Room2",
-   [{"row1-1","sub_somain.org","mac-address"},{"row1-2","sub_somain.org","mac-address"},{"row1-3","sub_somain.org","mac-address"},{"row1-4","sub_somain.org","mac-address"},{"row1-5","sub_somain.org","mac-address"}],
-   [{"row1-1","sub_somain.org","mac-address"},{"row1-2","sub_somain.org","mac-address"},{"row1-3","sub_somain.org","mac-address"},{"row1-4","sub_somain.org","mac-address"},{"row1-5","sub_somain.org","mac-address"}]
- ],
-]).
--define(FAVICON,"/file/system/path/to/ecsmcons/favicon.ico").
--define(CERTFILE,"/file/system/path/to/cert-file.pem").
--define(KEYFILE,"/file/system/path/to/key-file.pem").
--define(UPLOADS,"/file/system/path/to/ecsmcons/uploads/").
--define(STATIC,"/file/system/path/to/ecsmcons/static").
+         (see ecsmcons-example.hrl in repo)
 
 	  ii. ecom.hrl setup (for deepfreeze and windows 7)
-
-% domain of clients
--define(DOMAIN, "my.domain").
-
-% define location of deepfreeze on workstation
--define(DFC_DIR, "C:/Windows/SysWOW64/dfc.exe").
-
-% define deefreeze command line password
--define(DFC_PASSWD, "deepfreeze").
-
-% define erl path for client code
--define(UPLOADS_DIR, "c:/erl/uploads").
-
-% define location of windows users
--define(USERS_DIR, "c:/users").
-
-% define list of files/folders you don't want to have returned by logged on function
--define(USERS, ["Public","desktop.ini","Default","Default User","All Users"]).
+         (see ecom-example.hrl in repo)
 
 	 iii. create ecsmcons.conf
-
-{""}. % cert password
-{on,[{127,0,0,1}]}. % firewall: on/off, list of IP addresses
-{on,[{"test","test"},{"test2","test2"}]}. % username/password: on/off and username and password
-{60*60}. % cookie max age in seconds
+         (see ecsmcons.conf in rep)
 
    	  iv. compile ecsmcons.erl and ecom.erl, ecomsrv.erl, i.e. erlc ecsmcons.erl and erlc ecom.erl and erlc ecomsrv.erl
 
-   b. create ecsmcons.app  if command line app_start is used below
-
-    for HTTP create this:
-
-{application, ecsmcons,
- [{description, "Erlang Computer Systems Management CONSole"},
-  {vsn, "1.3"},
-  {modules, [ecsmcons]},
-  {registered, [ecsmcons]},
-  {applications, [kernel, stdlib]},
-  {mod, {ecsmcons, [8080]}}
- ]}.
-
-    for HTTPS create this:
-
-{application, ecsmcons,
- [{description, "Erlang Computer Systems Management CONSole"},
-  {vsn, "1.3"},
-  {modules, [ecsmcons]},
-  {registered, [ecsmcons]},
-  {applications, [kernel, stdlib]},
-  {mod, {ecsmcons, [8443]}}
- ]}.
-
+   b. create ecsmcons.app  if command line app_start is used see below
+     (see ecmscons.app in repo)
 
    c. run these commands from bash shell:
 
@@ -187,6 +120,7 @@ Versions
 
 -Add select/unselect all
 -Add example hrl data files
+-Update README to reflect examples added
 
 1.3
 
