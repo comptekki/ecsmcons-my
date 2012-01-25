@@ -1084,7 +1084,7 @@ divc({Wk,_Domain,_MacAddr}) ->
 		   _ ->
 	["
 <div id='"++Wk++"_ltd' class=\"ltd\">
-<div> id='"++Wk++"_ccell'>
+<div id='"++Wk++"_ccell'>
 
 <div class=\"lc\">
  <a href=# id='ping_",Wk,"' class='button' />P</a>
