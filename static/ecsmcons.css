@@ -73,9 +73,15 @@ input {width:100px;}
 
 .fl { float:left; }
 
+.unamed, .passwdd { height:30px;}
+.logind {}
+
+.unamed-t {float:left; padding: 0 5px 0 0;}
+.passwdd-t {float:left; padding: 0 5px 0 4px;}
+
 .button { float:left; }
 a.button:link, a.button:visited { color:#00ccff; }
-a.button:hover { color:#FFFFFF; }
+a.button:hover { color:#ffffff; }
 a.button { text-decoration:none; padding: 0 2px 0 2px; }
 
 .rc { padding: 0 0 0 5px; border-left: 1px solid #00aaaa;}
