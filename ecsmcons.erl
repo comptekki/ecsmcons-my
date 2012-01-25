@@ -207,6 +207,7 @@ handle('GET', ["login"], Req, _Port) ->
 ["<html>
 <head> 
 <title>ECSMCons Login</title>
+<link href='/static/ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
 <script type='text/javascript' src='/static/jquery-1.6.4.min.js'></script>
 <script>
 $(document).ready(function(){
@@ -215,26 +216,21 @@ $('#uname').focus();
 
 });
 </script>
-<style>
-body {background-color:black; color:yellow}
-</style>
 </head>
 <body>
 <form action='/' method='post'>
-<table>
-<tr>
-<td colspan=2><h3>Erlang Computer Management Console Login</h3></td>
-</tr>
-<tr>
-<td align='right'>Username: </td><td><input id='uname' type='text' name='uname'></td>
-</tr>
-<tr>
-<td align='right'>Password: </td><td><input id='passwd' type='password' name='passwd'></td>
-</tr>
-<tr>
-<td>&nbsp;</td><td><input type='submit' name='login' value='Login'></td>
-</tr>
-</table>
+<div>
+  <h3>Erlang Computer Management Console Login</h3>
+</div>
+<div class='unamed'>
+  <div class='unamed-t'>Username: </div><div><input id='uname' type='text' name='uname'></div>
+</div>
+<div class='passwdd'>
+  <div class='passwdd-t'>Password: </div><div><input id='passwd' type='password' name='passwd'></div>
+</div>
+<div class='logind'>
+  <div class='fl'><input type='submit' name='login' value='Login'></div>
+</div>
 </form>
 </body>
 </html>" 
