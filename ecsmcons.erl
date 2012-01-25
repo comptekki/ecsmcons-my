@@ -516,7 +516,6 @@ mkjsSelect_copy(?ROOMS),
 mkjsAllSelect_com(?ROOMS),
 mkjsSelect_com(?ROOMS),
 mkjsSelectAllChk(?ROOMS),
-mkjsUnselectAllChk(?ROOMS),
 mkcomButtons(?ROOMS),
 mkjsComAll(?ROOMS,"ping"),
 mkjsComAll(?ROOMS,"reboot"),
@@ -939,21 +938,6 @@ switcher(?ROOMS),
 "|mkjsSelectAllChk(Rooms)];
  mkjsSelectAllChk([]) ->
 	 [].
-%%
-
- mkjsUnselectAllChk([Room|Rooms]) ->
-	 [Rm|_]=Room,
-	 [
-"
- $('#unselectAll"++Rm++"').click(function(){
-     $('#"++Rm++" input:checkbox').each(function() {
-         $(this).attr('checked',!$(this).attr('checked'));
-     });
- });
-
-"|mkjsUnselectAllChk(Rooms)];
- mkjsUnselectAllChk([]) ->
-	 [].
 
 %%
 
@@ -1038,9 +1022,7 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 
  mkselunselAll(Rm) ->
  ["
-  <a href=# id='selectAll"++Rm++"' class='button' />Select All</a><br>
-  <a href=# id='unselectAll"++Rm++"' class='button' />Unselect All</a>
-
+  <a href=# id='selectAll"++Rm++"' class='button' />Select/Unselect All</a><br>
  "].
 
  %%
