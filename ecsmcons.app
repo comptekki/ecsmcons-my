@@ -1,6 +1,6 @@
 {application, ecsmcons,
  [{description, "Erlang Computer Systems Management CONSole"},
-  {vsn, "1.3"},
+  {vsn, "1.5"},
   {modules, [
   			ecsmcons,
   			misultin,
@@ -16,5 +16,5 @@
   			]},
   {registered, [ecsmcons]},
   {applications, [kernel, stdlib]},
-  {mod, {ecsmcons, [9443]}}
+  {mod, {ecsmcons, [9090]}}
  ]}.
