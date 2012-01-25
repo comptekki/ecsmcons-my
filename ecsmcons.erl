@@ -1084,9 +1084,9 @@ divc({Wk,_Domain,_MacAddr}) ->
 		   _ ->
 	["
 <div id='"++Wk++"_ltd' class=\"ltd\">
-<table id='"++Wk++"_ccell'>
-<tr>
-<td class=\"lc\">
+<div> id='"++Wk++"_ccell'>
+
+<div class=\"lc\">
  <a href=# id='ping_",Wk,"' class='button' />P</a>
  <a href=# id='reboot_",Wk,"' class='button' />R</a>
  <a href=# id='shutdown_",Wk,"' class='button' />S</a>
@@ -1097,10 +1097,9 @@ divc({Wk,_Domain,_MacAddr}) ->
  <a href=# id='net_restart_",Wk,"' class='button' />ReS</a>
  <a href=# id='net_stop_",Wk,"' class='button' />StS</a>
  <a href=# id='loggedon_",Wk,"' class='button' />L</a>
-</td>
-</tr>
-<tr>
-<td>
+</div>
+
+<div>
  <a href=# id='copy_",Wk,"' class='button' />Copy</a><br>
 
 <select id='copyselect",Wk,"'>                                                                                                                                                                                              
@@ -1110,11 +1109,10 @@ divc({Wk,_Domain,_MacAddr}) ->
 </select>
 <br>
  <input id='copyfn_",Wk,"' type='text'/>
-</td>
-</tr>
+</div>
 
-<tr>
-<td>
+<div>
+
  <a href=# id='com_",Wk,"' class='button' />Com</a><br>
 
 <select id='comselect",Wk,"'>                                                                                                                                                                                              
@@ -1124,9 +1122,9 @@ divc({Wk,_Domain,_MacAddr}) ->
 </select>
 <br>
 <input id='comstr_",Wk,"' type='text'/>
-</td>
-</tr>
-</table>
+
+</div>
+</div>
 </div>
 "]
 	end.
