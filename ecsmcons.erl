@@ -338,12 +338,12 @@ init2(?ROOMS,Ref_cons_time),
 							message(sepcol,boxCom[0] + ': ' + boxCom[2]);
 							if (boxCom[2].indexOf('command not')<0) {
 								 if(boxCom[2].length)
-								     $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html(boxCom[2]);
+								     $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').html(boxCom[2]);
 							     else
-							         $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('Logged-Out');
+							         $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').html('Up');
                             }
                             else {
-                                $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('Logged-Out');
+                                $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').html('.');
 							    $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							    $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
                             }
@@ -363,34 +363,32 @@ init2(?ROOMS,Ref_cons_time),
 						case 'reboot':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
-                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
+                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').html('.');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#000000');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#000000');
 							break;
 					    case 'shutdown':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
-                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
+                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').html('.');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#000000');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#000000');
 							break;
 					    case 'dffreeze':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'dfstatus').css('color','cyan');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'dfstatus').css('background-color','#006666');
-                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
-                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
+                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').html('.');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#000000');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#000000');
 							break;
 					    case 'dfthaw':
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'dfstatus').css('color','green');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'dfstatus').css('background-color','#006600');
-                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
-                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('.');
+                            $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').html('.');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_hltd').css('background-color','#000000');
 							$('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'_ltd').css('background-color','#000000');
 							break;
@@ -1064,10 +1062,10 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 
  <div id='",Wk,"_hltd' class=\"hltd\">
 
- <div id='",Wk,"logged_on' class='logged_on'>.</div>
+<div id='",Wk,"status' class='status'>.</div>
 
 <div class='wkchk'><input id='",Wk,"check' type='checkbox' class='checkbox' /></div></a><div class='wk'>",Wk,Domain,"</div>
-<div id='",Wk,"status' class='status'>Up</div>
+
 
 <div class='brk'></div>
 
@@ -1208,7 +1206,7 @@ comButtons([{Wk,Domain,Mac}|Wks]) ->
         if (r==true || rall==true){
    		    send('",Wk,Domain,":dffreeze:0');
 		    message(true,'Freezing ",Wk,"...')
-            $('#",Wk,"logged_on').html('.');
+            $('#",Wk,"status').html('.');
         } else
 		    message(true,'Freeze of ",Wk," aborted...')
 	});
@@ -1220,7 +1218,7 @@ comButtons([{Wk,Domain,Mac}|Wks]) ->
         if (r==true || rall==true){
    		    send('",Wk,Domain,":dfthaw:0');
 		    message(true,'Thawing ",Wk,"...')
-            $('#",Wk,"logged_on').html('.');
+            $('#",Wk,"status').html('.');
         } else
 		    message(true,'Thaw of ",Wk," aborted...')
 	});
@@ -1431,8 +1429,8 @@ jschkduRow([{Wk,_Domain,_Mac}|Wks],Rm) ->
 		   _ ->
 ["
 
-    if ($('#"++Wk++"logged_on').html()!='.'){
-        dupe_"++Rm++".push($('#"++Wk++"logged_on').html().toLowerCase());
+    if ($('#"++Wk++"status').html()!='.'){
+        dupe_"++Rm++".push($('#"++Wk++"status').html().toLowerCase());
         if (typeof hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]] === 'undefined')
             hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]] = [];
         hash_"++Rm++"[dupe_"++Rm++"[dupe_"++Rm++".length-1]].push('"++Wk++"');
@@ -1492,10 +1490,9 @@ jsrefcons_row([{Wk,_Domain,_Mac}|Wks],Rm) ->
 		$('#",Wk,"_ltd').css('background-color','#000');
 		$('#",Wk,"dfstatus').css('color','cyan');
 		$('#",Wk,"dfstatus').css('background-color','#006666');
-        $('#",Wk,"logged_on').html('.');
 		$('#",Wk,"status').css('color','red');
 		$('#",Wk,"status').css('background-color','#550000');
-        $('#",Wk,"logged_on').html('.');
+        $('#",Wk,"status').html('.');
 
 "
 |jsrefcons_row(Wks,Rm)]
