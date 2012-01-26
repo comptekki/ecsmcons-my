@@ -548,7 +548,7 @@ rms_keys(Get_rms,Get_rms),
 <div id='menu' class='fl'>
 
 <div id='rooms_title' class='fl'>
-[0]-Rooms: 
+[0]-Rooms 
 </div>
 
 <div id='switcher'>
@@ -564,7 +564,7 @@ switcher(?ROOMS),
  <div id='commands'>
 
  <div id='com_title'>
- Commands:
+ Commands
  </div>
 
  <div id='tcoms'>",
