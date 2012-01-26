@@ -340,10 +340,10 @@ init2(?ROOMS,Ref_cons_time),
 								 if(boxCom[2].length)
 								     $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html(boxCom[2]);
 							     else
-							         $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('Up');
+							         $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('Logged-Out');
                             }
                             else {
-                                $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('Up');
+                                $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'logged_on').html('Logged-Out');
 							    $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('color','red');
 							    $('#'+boxCom[0].substr(0,boxCom[0].indexOf('.'))+'status').css('background-color','#550000');
                             }
