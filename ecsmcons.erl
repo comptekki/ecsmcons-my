@@ -33,7 +33,7 @@
 
 -include("ecsmcons.hrl").
 
--define(APPS, ["","any.cmd","any.exe","any.msi","any.msp","any.reg","ecom.beam","Google Chrome - QCLabs.lnk","Mozilla Firefox - QCLabs.lnk","NiniteOne.exe","ninite.cmd"]).
+-define(APPS, ["","any.cmd","any.exe","any.msi","any.msp","any.reg","ecom.beam","NiniteOne.exe","ninite.cmd"]).
 -define(COMS, ["","mkuploads","ninite","ninitecmd","listupfls","anycmd"]).
 
 
