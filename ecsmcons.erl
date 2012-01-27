@@ -1066,7 +1066,6 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 
 <div class='wkchk'><input id='",Wk,"check' type='checkbox' class='checkbox' /></div></a><div class='wk'>",Wk,Domain,"</div>
 
-
 <div class='brk'></div>
 
 <div id='",Wk,"macaddr' class='macaddr'>",MacAddr,"</div> <div id='",Wk,"dfstatus' class='dfstatus'>DF?</div>
@@ -1098,28 +1097,29 @@ divc({Wk,_Domain,_MacAddr}) ->
 </div>
 
 <div>
- <a href=# id='copy_",Wk,"' class='button' />Copy</a><br>
+ <a href=# id='copy_",Wk,"' class='button' />Copy</a><br><br>
+
+ <input id='copyfn_",Wk,"' type='text'/>
 
 <select id='copyselect",Wk,"'>                                                                                                                                                                                              
     ",
        selections(?APPS),
 "                                                                                                                                                                                                                                     
 </select>
-<br>
- <input id='copyfn_",Wk,"' type='text'/>
+
 </div>
 
 <div>
 
  <a href=# id='com_",Wk,"' class='button' />Com</a><br>
 
+<input id='comstr_",Wk,"' type='text'/>
+
 <select id='comselect",Wk,"'>                                                                                                                                                                                              
     ",
         selections(?COMS),
 "                                                                                                                                                                                                                                     
 </select>
-<br>
-<input id='comstr_",Wk,"' type='text'/>
 
 </div>
 </div>
