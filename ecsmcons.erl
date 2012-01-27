@@ -786,21 +786,21 @@ switcher(?ROOMS),
  $('#copyAllSelect"++Room++"').change(function(){
 
 	 $('#copyAllInput"++Room++"').val($('#copyAllSelect"++Room++" option:selected').text());
-	 ", jsAllSelectRows_copy(Rows), "
+	 ", jsAllSelectRows_copy(Room,Rows), "
  });
 
  "].
 
- jsAllSelectRows_copy([Row|Rows]) ->
-	 [jsAllSelect_copy(Row)|jsAllSelectRows_copy(Rows)];
- jsAllSelectRows_copy([]) ->
+ jsAllSelectRows_copy(Room,[Row|Rows]) ->
+	 [jsAllSelect_copy(Room,Row)|jsAllSelectRows_copy(Room,Rows)];
+ jsAllSelectRows_copy(_Room,[]) ->
 	 [].
 
- jsAllSelect_copy([{Wk,_Domain,_MacAddr}|Wks]) ->
+ jsAllSelect_copy(Rm,[{Wk,_FQDN,_MacAddr,_Os}|Wks]) ->
 	 case Wk of
-		 "." ->	jsAllSelect_copy(Wks);
+		 "." ->	jsAllSelect_copy(Rm,Wks);
 			_ ->
-			 Rm=string:sub_string(Wk,1,6),
+%			 Rm=string:sub_string(Wk,1,6),
 			 [
  "
 	 if(
@@ -809,9 +809,9 @@ switcher(?ROOMS),
 			 (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
 	   )
 		 $('#copyfn_",Wk,"').val($('#copyAllInput"++Rm++"').val());
- "|jsAllSelect_copy(Wks)]
+ "|jsAllSelect_copy(Rm,Wks)]
 	 end;
- jsAllSelect_copy([]) ->
+ jsAllSelect_copy(_Room,[]) ->
 	 [].
  %%
 
@@ -828,7 +828,7 @@ switcher(?ROOMS),
  jsSelectRows_copy([]) ->
 	 [].
 
- jsSelect_copy([{Wk,_Domain,_MacAddr}|Wks]) ->
+ jsSelect_copy([{Wk,_FQDN,_MacAddr,_Os}|Wks]) ->
 	 case Wk of
 		 "." ->	jsSelect_copy(Wks);
 			_ ->
@@ -858,21 +858,21 @@ switcher(?ROOMS),
  $('#comAllSelect"++Room++"').change(function(){
 
 	 $('#comAllInput"++Room++"').val($('#comAllSelect"++Room++" option:selected').text());
-	 ", jsAllSelectRows_com(Rows), "
+	 ", jsAllSelectRows_com(Room,Rows), "
  });
 
  "].
 
- jsAllSelectRows_com([Row|Rows]) ->
-	 [jsAllSelect_com(Row)|jsAllSelectRows_com(Rows)];
- jsAllSelectRows_com([]) ->
+ jsAllSelectRows_com(Room,[Row|Rows]) ->
+	 [jsAllSelect_com(Room,Row)|jsAllSelectRows_com(Room,Rows)];
+ jsAllSelectRows_com(_Room,[]) ->
 	 [].
 
- jsAllSelect_com([{Wk,_Domain,_MacAddr}|Wks]) ->
+ jsAllSelect_com(Rm,[{Wk,_FQDN,_MacAddr,_Os}|Wks]) ->
 	 case Wk of
-		 "." ->	jsAllSelect_com(Wks);
+		 "." ->	jsAllSelect_com(Rm,Wks);
 			_ ->
-			 Rm=string:sub_string(Wk,1,6),
+%			 Rm=string:sub_string(Wk,1,6),
 			 [
  "
 	 if(
@@ -881,9 +881,9 @@ switcher(?ROOMS),
 			 (!$('#",Wk,"check').prop('checked') || $('#",Wk,"check').prop('checked')))
 	   )
 		 $('#comstr_",Wk,"').val($('#comAllInput"++Rm++"').val());
- "|jsAllSelect_com(Wks)]
+ "|jsAllSelect_com(Rm,Wks)]
 	 end;
- jsAllSelect_com([]) ->
+ jsAllSelect_com(_Room,[]) ->
 	 [].
  
 %%
@@ -901,7 +901,7 @@ switcher(?ROOMS),
  jsSelectRows_com([]) ->
 	 [].
 
- jsSelect_com([{Wk,_Domain,_MacAddr}|Wks]) ->
+ jsSelect_com([{Wk,_FQDN,_MacAddr,_Os}|Wks]) ->
 	 case Wk of
 		 "." ->	jsSelect_com(Wks);
 			_ ->
@@ -1054,7 +1054,7 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
  mkRoomRows([]) ->
 	 [].
 
- divhc({Wk,Domain,MacAddr}) ->
+ divhc({Wk,FQDN,MacAddr,_Os}) ->
 	 case Wk of
 		 "." ->	["<div class=\"hltd\">.</div>"];
 			_ ->
@@ -1064,7 +1064,7 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 
 <div id='",Wk,"status' class='status'>.</div>
 
-<div class='wkchk'><input id='",Wk,"check' type='checkbox' class='checkbox' /></div></a><div class='wk'>",Wk,Domain,"</div>
+<div class='wkchk'><input id='",Wk,"check' type='checkbox' class='checkbox' /></div></a><div class='wk'>",FQDN,"</div>
 
 <div class='brk'></div>
 
@@ -1075,7 +1075,7 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 "]
 	end.
 
-divc({Wk,_Domain,_MacAddr}) ->
+divc({Wk,_FQDN,_MacAddr,_Os}) ->
 	case Wk of
 		"." ->	["<div class=\"ltd\">.</div>"];
 		   _ ->
@@ -1152,7 +1152,7 @@ comButtonsRows([Row|Rows]) ->
 comButtonsRows([]) ->
 	[].
 
-comButtons([{Wk,Domain,MacAddr}|Wks]) ->
+comButtons([{Wk,FQDN,MacAddr,_Os}|Wks]) ->
 	case Wk of
 		"." -> comButtons(Wks);
 		_ ->
@@ -1162,7 +1162,7 @@ comButtons([{Wk,Domain,MacAddr}|Wks]) ->
         if (rall==false)
             r=confirm('Reboot ",Wk,"?');
         if (r==true || rall==true){
-   		    send('",Wk,Domain,":reboot:0');
+   		    send('",FQDN,":reboot:0');
 		    message(true,'Rebooting ",Wk,"...')
         } else
 		    message(true,'Reboot of ",Wk," aborted...')
@@ -1173,29 +1173,29 @@ comButtons([{Wk,Domain,MacAddr}|Wks]) ->
         if (rall==false)
             r=confirm('Shutdown ",Wk,"?');
         if (r==true || rall==true){
-		    send('",Wk,Domain,":shutdown:0');
+		    send('",FQDN,":shutdown:0');
 		    message(true,'Shutting down ",Wk,"...');
         } else
 		    message(true,'Shutdown of ",Wk," aborted...')
 	});
 
 	$('#wake_",Wk,"').click(function(){
-		send('",Wk,Domain,":wol:",MacAddr,"');
+		send('",FQDN,":wol:",MacAddr,"');
 		message(true,'Waking ",Wk,"...')
 	});
 
 	$('#ping_",Wk,"').click(function(){
-		send('",Wk,Domain,":ping:0');
+		send('",FQDN,":ping:0');
 		message(true,'Pinging ",Wk,"...');
 	});
 
 	$('#net_restart_",Wk,"').click(function(){
-		send('",Wk,Domain,":net_restart:0');
+		send('",FQDN,":net_restart:0');
 		message(true,'Restarting win service on ",Wk,"...')
 	});
 
 	$('#net_stop_",Wk,"').click(function(){
-		send('",Wk,Domain,":net_stop:0');
+		send('",FQDN,":net_stop:0');
 		message(true,'Stopping win service on ",Wk,"...')
 	});
 
@@ -1204,7 +1204,7 @@ comButtons([{Wk,Domain,MacAddr}|Wks]) ->
         if (rall==false)
             r=confirm('Freeze ",Wk,"?');
         if (r==true || rall==true){
-   		    send('",Wk,Domain,":dffreeze:0');
+   		    send('",FQDN,":dffreeze:0');
 		    message(true,'Freezing ",Wk,"...')
             $('#",Wk,"status').html('.');
         } else
@@ -1216,7 +1216,7 @@ comButtons([{Wk,Domain,MacAddr}|Wks]) ->
         if (rall==false)
             r=confirm('Thaw ",Wk,"?');
         if (r==true || rall==true){
-   		    send('",Wk,Domain,":dfthaw:0');
+   		    send('",FQDN,":dfthaw:0');
 		    message(true,'Thawing ",Wk,"...')
             $('#",Wk,"status').html('.');
         } else
@@ -1224,18 +1224,18 @@ comButtons([{Wk,Domain,MacAddr}|Wks]) ->
 	});
 
 	$('#dfstatus_",Wk,"').click(function(){
-		send('",Wk,Domain,":dfstatus:0');
+		send('",FQDN,":dfstatus:0');
 		message(true,'DF Status sent ",Wk,"...')
 	});
 
 	$('#loggedon_",Wk,"').click(function(){
-		send('",Wk,Domain,":loggedon:0');
+		send('",FQDN,":loggedon:0');
 		message(true,'loggedon sent ",Wk,"...')
 	});
 
 	$('#copy_",Wk,"').click(function(){
         if($('#copyfn_",Wk,"').val().length){
-		    send('",Wk,Domain,":copy:' + $('#copyfn_",Wk,"').val());
+		    send('",FQDN,":copy:' + $('#copyfn_",Wk,"').val());
 		    message(true,'Copy sent ",Wk,"...')
         } else {
             $('#copyfn_",Wk,"').val('!');
@@ -1245,7 +1245,7 @@ comButtons([{Wk,Domain,MacAddr}|Wks]) ->
 
 	$('#com_",Wk,"').click(function(){
         if($('#comstr_",Wk,"').val().length){
-		    send('",Wk,Domain,":com:' + $('#comstr_",Wk,"').val());
+		    send('",FQDN,":com:' + $('#comstr_",Wk,"').val());
 		    message(true,'Command sent ",Wk,"...')
         } else {
             $('#comstr_",Wk,"').val('!');
@@ -1280,7 +1280,7 @@ mkjsComAllRows([Row|Rows],Rm,Com) ->
 mkjsComAllRows([],_Rm,_Com) ->
     [].
 
-mkjsComAllRow([{Wk,_Domain,_MacAddr}|Wks],Rm,Com) ->
+mkjsComAllRow([{Wk,_FQDN,_MacAddr,_Os}|Wks],Rm,Com) ->
 	case Wk of
 		"." ->	mkjsComAllRow(Wks,Rm,Com);
 		   _ ->
@@ -1423,7 +1423,7 @@ jschkduRows([Row|Rows],Rm) ->
 jschkduRows([],_Rm) ->
     [].
 
-jschkduRow([{Wk,_Domain,_MacAddr}|Wks],Rm) ->
+jschkduRow([{Wk,_FQDN,_MacAddr,_Os}|Wks],Rm) ->
 	case Wk of
 		"." ->	jschkduRow(Wks,Rm);
 		   _ ->
@@ -1480,7 +1480,7 @@ jsrefcons_rows([Row|Rows],Rm) ->
 jsrefcons_rows([],_Rm) ->
     [].
 
-jsrefcons_row([{Wk,_Domain,_MacAddr}|Wks],Rm) ->
+jsrefcons_row([{Wk,_FQDN,_MacAddr,_Os}|Wks],Rm) ->
 	case Wk of
 		"." ->	jsrefcons_row(Wks,Rm);
 		   _ ->
