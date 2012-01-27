@@ -796,7 +796,7 @@ switcher(?ROOMS),
  jsAllSelectRows_copy([]) ->
 	 [].
 
- jsAllSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
+ jsAllSelect_copy([{Wk,_Domain,_MacAddr}|Wks]) ->
 	 case Wk of
 		 "." ->	jsAllSelect_copy(Wks);
 			_ ->
@@ -828,7 +828,7 @@ switcher(?ROOMS),
  jsSelectRows_copy([]) ->
 	 [].
 
- jsSelect_copy([{Wk,_Domain,_Mac}|Wks]) ->
+ jsSelect_copy([{Wk,_Domain,_MacAddr}|Wks]) ->
 	 case Wk of
 		 "." ->	jsSelect_copy(Wks);
 			_ ->
@@ -868,7 +868,7 @@ switcher(?ROOMS),
  jsAllSelectRows_com([]) ->
 	 [].
 
- jsAllSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
+ jsAllSelect_com([{Wk,_Domain,_MacAddr}|Wks]) ->
 	 case Wk of
 		 "." ->	jsAllSelect_com(Wks);
 			_ ->
@@ -901,7 +901,7 @@ switcher(?ROOMS),
  jsSelectRows_com([]) ->
 	 [].
 
- jsSelect_com([{Wk,_Domain,_Mac}|Wks]) ->
+ jsSelect_com([{Wk,_Domain,_MacAddr}|Wks]) ->
 	 case Wk of
 		 "." ->	jsSelect_com(Wks);
 			_ ->
@@ -1152,7 +1152,7 @@ comButtonsRows([Row|Rows]) ->
 comButtonsRows([]) ->
 	[].
 
-comButtons([{Wk,Domain,Mac}|Wks]) ->
+comButtons([{Wk,Domain,MacAddr}|Wks]) ->
 	case Wk of
 		"." -> comButtons(Wks);
 		_ ->
@@ -1180,7 +1180,7 @@ comButtons([{Wk,Domain,Mac}|Wks]) ->
 	});
 
 	$('#wake_",Wk,"').click(function(){
-		send('",Wk,Domain,":wol:",Mac,"');
+		send('",Wk,Domain,":wol:",MacAddr,"');
 		message(true,'Waking ",Wk,"...')
 	});
 
@@ -1280,7 +1280,7 @@ mkjsComAllRows([Row|Rows],Rm,Com) ->
 mkjsComAllRows([],_Rm,_Com) ->
     [].
 
-mkjsComAllRow([{Wk,_Domain,_Mac}|Wks],Rm,Com) ->
+mkjsComAllRow([{Wk,_Domain,_MacAddr}|Wks],Rm,Com) ->
 	case Wk of
 		"." ->	mkjsComAllRow(Wks,Rm,Com);
 		   _ ->
@@ -1423,7 +1423,7 @@ jschkduRows([Row|Rows],Rm) ->
 jschkduRows([],_Rm) ->
     [].
 
-jschkduRow([{Wk,_Domain,_Mac}|Wks],Rm) ->
+jschkduRow([{Wk,_Domain,_MacAddr}|Wks],Rm) ->
 	case Wk of
 		"." ->	jschkduRow(Wks,Rm);
 		   _ ->
@@ -1480,7 +1480,7 @@ jsrefcons_rows([Row|Rows],Rm) ->
 jsrefcons_rows([],_Rm) ->
     [].
 
-jsrefcons_row([{Wk,_Domain,_Mac}|Wks],Rm) ->
+jsrefcons_row([{Wk,_Domain,_MacAddr}|Wks],Rm) ->
 	case Wk of
 		"." ->	jsrefcons_row(Wks,Rm);
 		   _ ->
@@ -1562,10 +1562,10 @@ handle_websocket(Ws) ->
 							Data2=recData(Res),
 							io:format("~n done shutdown ~p - data2: ~p ~n",[Box, Data2]);
 						"wol" ->
-							MacList=string:tokens(Args,"-"),
-							Mac=string:join(MacList,":"),
-							io:format("~n in wol .... args: ~p ~n",[Mac]),
-							MacAddrBin= <<<<(list_to_integer(X, 16))>> || X <- string:tokens(Mac, ":")>>,
+							MacAddrList=string:tokens(Args,"-"),
+							MacAddr=string:join(MacAddrList,":"),
+							io:format("~n in wol .... args: ~p ~n",[MacAddr]),
+							MacAddrBin= <<<<(list_to_integer(X, 16))>> || X <- string:tokens(MacAddr, ":")>>,
 							io:format("~n macbin: ~p ~n",[MacAddrBin]),
 							MagicPacket= << (dup(<<16#FF>>, 6))/binary, (dup(MacAddrBin, 16))/binary >>,
 							{ok,S} = gen_udp:open(0, [{broadcast, true}]),
