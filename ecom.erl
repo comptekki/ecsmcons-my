@@ -84,6 +84,11 @@ process_msg(Box, Com, Args, Msg_PID) ->
 					{Year,Month,Day}=date(),
 					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
 					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python /silent "++?UPLOADS_DIR++"\\"++Date++"log.txt");
+				"ninitemlog" ->
+					{Year,Month,Day}=date(),
+					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
+					{ok, Log}=file:read_file(?UPLOADS_DIR++"\\"++Date++"log.txt"),
+					Msg_PID ! {ok, done, {Box, "ninitemlog", Log}};		
 				"listupfls" ->
 					Msg_PID ! {ok, done, {Box, "listupfls", list_up_fls()}};		
 				Unsupported -> Unsupported
