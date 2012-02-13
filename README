@@ -121,6 +121,7 @@ Versions
 -Tweak CSS
 -Change status/up/hosts areas
 -Change workstations params format
+-Add send ninite log to server message window
 
 1.4
 
