@@ -1030,17 +1030,17 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
  "
 
  <div id='",Room,"' class='room'>
- ",mkRoomRows(Rows),"
+ ",mkRoomRows(Rows,Room,1),"
 
  </div>
 
  "
 	 ].
 
- mkRoomRows([Row|Rows]) ->
+ mkRoomRows([Row|Rows],Rm,RowCnt) ->
 	 [[
 	  "
- <div>",
+ <div id='",Rm,"_row_",integer_to_list(RowCnt),"'>",
 	  [divhc(Wks) || Wks <- Row],
 	  "
  </div>
@@ -1050,8 +1050,8 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 	  "
  </div>
  <div class='brk'></div>"
-	 ]|mkRoomRows(Rows)];
- mkRoomRows([]) ->
+	 ]|mkRoomRows(Rows,Rm,RowCnt+1)];
+ mkRoomRows([],_Rm,_RowCnt) ->
 	 [].
 
  divhc({Wk,FQDN,MacAddr,_Os}) ->
@@ -1144,19 +1144,28 @@ mkcomButtons([Room|Rooms]) ->
 mkcomButtons([]) ->
 	[].
 
-comButtonsRm([_Room|Rows]) ->
-    comButtonsRows(Rows).
+comButtonsRm([Room|Rows]) ->
+    comButtonsRows(Rows,Room,1).
 
-comButtonsRows([Row|Rows]) ->
-	[comButtons(Row)|comButtonsRows(Rows)];
-comButtonsRows([]) ->
+comButtonsRows([Row|Rows],Rm,RowCnt) ->
+	[comButtons(Row,RowCnt,Rm)|comButtonsRows(Rows,Rm,RowCnt+1)];
+comButtonsRows([],_Rm,_RowCnt) ->
 	[].
 
-comButtons([{Wk,FQDN,MacAddr,_Os}|Wks]) ->
+comButtons([{Wk,FQDN,MacAddr,_Os}|Wks],RowCnt,Rm) ->
 	case Wk of
-		"." -> comButtons(Wks);
+		"." -> comButtons(Wks,RowCnt,Rm);
 		_ ->
 	["
+
+    $('#",Wk,"status').click(function(){
+
+alert('",Rm,"_row_",integer_to_list(RowCnt),"');
+        $('#",Rm,"_row_",integer_to_list(RowCnt)," input:checkbox').each(function() {
+           $(this).attr('checked',!$(this).attr('checked'));
+       });
+	});
+
 	$('#reboot_",Wk,"').click(function(){
         r=false;
         if (rall==false)
@@ -1253,9 +1262,9 @@ comButtons([{Wk,FQDN,MacAddr,_Os}|Wks]) ->
         }
 	});
 
-    "|comButtons(Wks)]
+    "|comButtons(Wks,RowCnt,Rm)]
 	end;
-comButtons([]) ->
+comButtons([],_RowCnt,_Rm) ->
 	[].
 %%
 
