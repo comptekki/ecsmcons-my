@@ -122,6 +122,8 @@ Versions
 -Change status/up/hosts areas
 -Change workstations params format
 -Add send ninite log to server message window
+-Add check/uncheck all check boxes on row by clicking workstation status area
+-Add check/uncheck all check boxes on column by clicking workstation command area
 
 1.4
 
