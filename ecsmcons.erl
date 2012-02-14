@@ -1041,7 +1041,7 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 	 [[
 	  "
  <div id='",Rm,"_row_",integer_to_list(RowCnt),"'>",
-	  [divhc(Wks) || Wks <- Row],
+	  divhc(Rm,Row,1),
 	  "
  </div>
  <div class='brk'></div>
@@ -1054,13 +1054,13 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
  mkRoomRows([],_Rm,_RowCnt) ->
 	 [].
 
- divhc({Wk,FQDN,MacAddr,_Os}) ->
-	 case Wk of
-		 "." ->	["<div class=\"hltd\">.</div>"];
+ divhc(Rm,[{Wk,FQDN,MacAddr,_Os}|Wks],ColCnt) ->
+	 [case Wk of
+		 "." ->	["<div class='hltd'>.</div>"];
 			_ ->
 			 ["
 
- <div id='",Wk,"_hltd' class=\"hltd\">
+<div id='",Wk,"_hltd' class='hltd ",Rm,"_col_",integer_to_list(ColCnt),"'>
 
 <div id='",Wk,"status' class='status'>.</div>
 
@@ -1073,7 +1073,9 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 </div>
 
 "]
-	end.
+	  end|divhc(Rm,Wks,ColCnt+1)];
+divhc(_Rm,[],_ColCnt) ->
+	[].
 
 divc({Wk,_FQDN,_MacAddr,_Os}) ->
 	case Wk of
@@ -1148,19 +1150,23 @@ comButtonsRm([Room|Rows]) ->
     comButtonsRows(Rows,Room,1).
 
 comButtonsRows([Row|Rows],Rm,RowCnt) ->
-	[comButtons(Row,RowCnt,Rm)|comButtonsRows(Rows,Rm,RowCnt+1)];
+	[comButtons(Row,Rm,RowCnt,1)|comButtonsRows(Rows,Rm,RowCnt+1)];
 comButtonsRows([],_Rm,_RowCnt) ->
 	[].
 
-comButtons([{Wk,FQDN,MacAddr,_Os}|Wks],RowCnt,Rm) ->
+comButtons([{Wk,FQDN,MacAddr,_Os}|Wks],Rm,RowCnt,ColCnt) ->
 	case Wk of
-		"." -> comButtons(Wks,RowCnt,Rm);
+		"." -> comButtons(Wks,Rm,RowCnt,ColCnt+1);
 		_ ->
 	["
 
-    $('#",Wk,"status').click(function(){
+    $('#",Wk,"_ltd').click(function(){
+        $('.",Rm,"_col_",integer_to_list(ColCnt)," input:checkbox').each(function() {
+           $(this).attr('checked',!$(this).attr('checked'));
+       });
+	});
 
-alert('",Rm,"_row_",integer_to_list(RowCnt),"');
+    $('#",Wk,"status').click(function(){
         $('#",Rm,"_row_",integer_to_list(RowCnt)," input:checkbox').each(function() {
            $(this).attr('checked',!$(this).attr('checked'));
        });
@@ -1262,9 +1268,9 @@ alert('",Rm,"_row_",integer_to_list(RowCnt),"');
         }
 	});
 
-    "|comButtons(Wks,RowCnt,Rm)]
+    "|comButtons(Wks,Rm,RowCnt,ColCnt+1)]
 	end;
-comButtons([],_RowCnt,_Rm) ->
+comButtons([],_Rm,_RowCnt,_ColCnt) ->
 	[].
 %%
 
