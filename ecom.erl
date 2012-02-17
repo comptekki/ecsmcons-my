@@ -83,7 +83,7 @@ process_msg(Box, Com, Args, Msg_PID) ->
 				"ninite" ->
 					{Year,Month,Day}=date(),
 					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
-					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python /silent "++?UPLOADS_DIR++"\\"++Date++"log.txt");
+					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python /silent /disableshortcuts "++?UPLOADS_DIR++"\\"++Date++"log.txt");
 				"ninitelog" ->
 					{Year,Month,Day}=date(),
 					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
