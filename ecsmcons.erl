@@ -34,7 +34,7 @@
 -include("ecsmcons.hrl").
 
 -define(APPS, ["","any.cmd","any.exe","any.msi","any.msp","any.reg","ecom.beam","NiniteOne.exe","ninite.cmd"]).
--define(COMS, ["","mkuploads","ninite","ninitecmd","ninitelog","listupfls","anycmd"]).
+-define(COMS, ["","anycmd","listupfls","mkuploads","ninite","ninitecmd","ninitelog"]).
 
 
 app_start() ->
