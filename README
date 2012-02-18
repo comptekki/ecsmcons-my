@@ -118,7 +118,9 @@ Versions
 --------
 1.6
 
--
+-Add /disableshortcuts to ninite command
+-Fix Column selection by adding Column select area to right of L command
+-Change select/unselect all to toggle all
 
 1.5
 
