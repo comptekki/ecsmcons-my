@@ -1016,7 +1016,7 @@ mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
 
  mkselunselAll(Rm) ->
  ["
-  <a href=# id='selectAll"++Rm++"' class='button' />Select/Unselect All</a><br>
+  <a href=# id='selectAll"++Rm++"' class='button' />Toggle All</a><br>
  "].
 
  %%
@@ -1096,6 +1096,7 @@ divc({Wk,_FQDN,_MacAddr,_Os}) ->
  <a href=# id='net_restart_",Wk,"' class='button' />ReS</a>
  <a href=# id='net_stop_",Wk,"' class='button' />StS</a>
  <a href=# id='loggedon_",Wk,"' class='button' />L</a>
+ <a href=# id='",Wk,"_col' class='cols'>C</a>
 </div>
 
 <div>
@@ -1160,7 +1161,7 @@ comButtons([{Wk,FQDN,MacAddr,_Os}|Wks],Rm,RowCnt,ColCnt) ->
 		_ ->
 	["
 
-    $('#",Wk,"_ltd').click(function(){
+    $('#",Wk,"_col').click(function(){
         $('.",Rm,"_col_",integer_to_list(ColCnt)," input:checkbox').each(function() {
            $(this).attr('checked',!$(this).attr('checked'));
        });
