@@ -131,3 +131,10 @@ a.button { text-decoration:none; padding: 0 2px 0 2px; }
   width: 10px;
   padding: 0 5px 0 0;
 }
+
+.cols {
+	float:left;
+	background-color:#aaaaaa; color:000055; padding:0 5px 0 5px; font-weight:bold;
+}
+
+a.cols {text-decoration:none;}
