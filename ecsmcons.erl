@@ -510,6 +510,8 @@ mkjsSelect_copy(?ROOMS),
 mkjsAllSelect_com(?ROOMS),
 mkjsSelect_com(?ROOMS),
 mkjsSelectAllChk(?ROOMS),
+mkjsUnSelectAllChk(?ROOMS),
+mkjsToggleAllChk(?ROOMS),
 mkcomButtons(?ROOMS),
 mkjsComAll(?ROOMS,"ping"),
 mkjsComAll(?ROOMS,"reboot"),
@@ -592,7 +594,7 @@ switcher(?ROOMS),
  ",
  mkAllRoomsComsInput({"copy","Copy All"}),
  mkAllRoomsComsInput({"com","Com All"}),
- mkAllRoomsSelectUnselectAll(?ROOMS),
+ mkAllRoomsSelectUnselectToggleAll(?ROOMS),
  "
  </div>
 
@@ -654,7 +656,7 @@ switcher(?ROOMS),
 					  $('#"++Rm++"_comsInputcopy').show();
 					  $('#"++Rm++"_comsInputcom').show();
 
-					  $('#"++Rm++"_selunselall').show();
+					  $('#"++Rm++"_selunseltogall').show();
 
                       $('#"++Rm++"toggle').click();
 					  $('#"++Rm++"toggle').focus();
@@ -693,7 +695,7 @@ switcher(?ROOMS),
 		 $('#"++Rm++"_coms').show();
 		 $('#"++Rm++"_comsInputcopy').show();
 		 $('#"++Rm++"_comsInputcom').show();
- 	     $('#"++Rm++"_selunselall').show();
+ 	     $('#"++Rm++"_selunseltogall').show();
 		 $('#"++Rm++"toggle').removeClass('rm_selected');
 		 $('#"++Rm++"toggle').removeClass('rm_not_selected');
 		 $('#"++Rm++"toggle').addClass('rm_selected');
@@ -704,7 +706,7 @@ switcher(?ROOMS),
 		 $('#"++Room++"_coms').hide();
 		 $('#"++Room++"_comsInputcopy').hide();
 		 $('#"++Room++"_comsInputcom').hide();
-	     $('#"++Room++"_selunselall').hide();
+	     $('#"++Room++"_selunseltogall').hide();
 		 $('#"++Room++"toggle').removeClass('rm_selected');
 		 $('#"++Room++"toggle').removeClass('rm_not_selected');
 		 $('#"++Room++"toggle').addClass('rm_not_selected')
@@ -925,12 +927,44 @@ switcher(?ROOMS),
 "
  $('#selectAll"++Rm++"').click(function(){
      $('#"++Rm++" input:checkbox').each(function() {
-         $(this).attr('checked',!$(this).attr('checked'));
+         $(this).attr('checked','checked');
      });
  });
 
 "|mkjsSelectAllChk(Rooms)];
  mkjsSelectAllChk([]) ->
+	 [].
+
+%%
+
+ mkjsUnSelectAllChk([Room|Rooms]) ->
+	 [Rm|_]=Room,
+	 [
+"
+ $('#unselectAll"++Rm++"').click(function(){
+     $('#"++Rm++" input:checkbox').each(function() {
+         $(this).removeAttr('checked');
+     });
+ });
+
+"|mkjsUnSelectAllChk(Rooms)];
+ mkjsUnSelectAllChk([]) ->
+	 [].
+
+%%
+
+ mkjsToggleAllChk([Room|Rooms]) ->
+	 [Rm|_]=Room,
+	 [
+"
+ $('#toggleAll"++Rm++"').click(function(){
+     $('#"++Rm++" input:checkbox').each(function() {
+         $(this).attr('checked',!$(this).attr('checked'));
+     });
+ });
+
+"|mkjsToggleAllChk(Rooms)];
+ mkjsToggleAllChk([]) ->
 	 [].
 
 %%
@@ -1000,23 +1034,25 @@ switcher(?ROOMS),
 
 %%
 
-mkAllRoomsSelectUnselectAll([Room|Rooms]) ->
+mkAllRoomsSelectUnselectToggleAll([Room|Rooms]) ->
 	 [Rm|_]=Room,
 	 ["
  <div class='brk'></div>
 
- <div id='",Rm,"_selunselall' class='room'>
+ <div id='",Rm,"_selunseltogall' class='room'>
 <br>
-	 "++mkselunselAll(Rm)++"
+	 "++mkselunseltogAll(Rm)++"
  </div>
 
- "|mkAllRoomsSelectUnselectAll(Rooms)];
- mkAllRoomsSelectUnselectAll([]) ->
+ "|mkAllRoomsSelectUnselectToggleAll(Rooms)];
+ mkAllRoomsSelectUnselectToggleAll([]) ->
 	[].
 
- mkselunselAll(Rm) ->
+ mkselunseltogAll(Rm) ->
  ["
-  <a href=# id='selectAll"++Rm++"' class='button' />Toggle All</a><br>
+  <a href=# id='selectAll"++Rm++"' class='button' />Select All</a><br>
+  <a href=# id='unselectAll"++Rm++"' class='button' />UnSelect All</a><br>
+  <a href=# id='toggleAll"++Rm++"' class='button' />Toggle All</a><br>
  "].
 
  %%
