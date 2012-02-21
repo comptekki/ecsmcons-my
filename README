@@ -120,7 +120,7 @@ Versions
 
 -Add /disableshortcuts to ninite command
 -Fix Column selection by adding Column select button to right of L button
--Change select/unselect all to toggle all
+-Change select/unselect all to toggle all for checkbox buttons
 -Add Select all and UnSelect all checkbox buttons
 
 1.5
