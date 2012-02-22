@@ -32,7 +32,7 @@ th.oth {font-size:18pt; text-align:center; border:1px solid #555555;}
 table { border-collapse:collapse;}
 input {width:100px;}
 
-#wrapper { width:1690px; margin:0 auto; border:1px solid #000;}
+#wrapper { width:1710px; margin:0 auto; border:1px solid #000;}
 
 #menu { width:99%; background-color:#888; font-weight:bold;  margin: 3px 3px 0 3px;}
 
@@ -69,7 +69,7 @@ input {width:100px;}
 
 .hltd {
 	float:left;
-	width:265px;
+	width:267px;
 	height:60px;
 	padding:4px;
 	vertical-align:top;
@@ -80,7 +80,7 @@ input {width:100px;}
 
 .ltd {
 	float:left;
-	width:265px;
+	width:267px;
 	height:110px;
 	padding:4px;
 	vertical-align:top;
@@ -92,8 +92,8 @@ input {width:100px;}
 .logged_on { color:green; background-color:#333; width:265px; text-align:center; margin:0 auto; }
 
 .line2 { float:left; width:257px; background-color:#333; padding:0px 5px 0px 5px; margin:0 auto;}
-.status { float:left; width:257px; color:red; background-color:#333; text-align:center; padding:0 5px 0 5px; margin:0 auto;}
-.dfstatus { float:left; color:aquamarine; background-color:#333; width:100px; text-align:center; }
+.status { float:left; width:259px; color:red; background-color:#333; text-align:center; padding:0 5px 0 5px; margin:0 auto;}
+.dfstatus { float:left; width:104px; color:aquamarine; background-color:#333; text-align:center; }
 
 .error {color:red;}
 .bold {font-weight:bold; color:black; background-color:white; padding:0px 2px 0px 2px;}
@@ -123,12 +123,12 @@ a.button { text-decoration:none; padding: 0 2px 0 2px; }
 .ttop {width:100%;}
 
 .wkchk { float:left; height:18px; background-color:#454545; padding:3px 0 3px; 0;}
-.wk { float:left; width:250px; background-color:#454545; padding:3px 0 3px; 0;}
+.wk { float:left; width:242px; background-color:#454545; padding:3px 0 3px; 0;}
 
 .checkbox
 {
   float:left;
-  width: 10px;
+  width: 20px;
   padding: 0 5px 0 0;
 }
 
