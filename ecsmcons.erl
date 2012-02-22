@@ -1134,9 +1134,9 @@ divc({Wk,_FQDN,_MacAddr,_Os}) ->
  <a href=# id='loggedon_",Wk,"' class='button' />L</a>
  <a href=# id='",Wk,"_col' class='cols'>C</a>
 </div>
-
+<div class='brk'></div>
 <div>
- <a href=# id='copy_",Wk,"' class='button' />Copy</a><br><br>
+ <a href=# id='copy_",Wk,"' class='button' />Copy</a><br>
 
  <input id='copyfn_",Wk,"' type='text'/>
 
