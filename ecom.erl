@@ -94,7 +94,7 @@ process_msg(Box, Com, Args, Msg_PID) ->
 				"wuinstall" ->
 					{Year,Month,Day}=date(),
 					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
-					os:cmd("c:/erl/uploads/wuinstall.exe /install /criteria \"IsInstalled=0\" >"++?UPLOADS_DIR++"\\wui-"++Date++"log.txt");
+					os:cmd("c:/erl/uploads/wuinstall.exe /install /criteria \"IsInstalled=0 and Type='Software'\" >"++?UPLOADS_DIR++"\\wui-"++Date++"log.txt");
 
 				Unsupported -> Unsupported
 			end,
