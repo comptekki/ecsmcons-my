@@ -29,7 +29,13 @@
 
 -module(ecomsrv).
 
--export([send_com/2, send_com/4]).
+-export([start/0, send_com/2, send_com/4, rec_com/0]).
+
+-include("/usr/local/lib/yaws/include/yaws_api.hrl").
+-include("ecom.hrl").
+
+start() ->
+    register(hanwebs, spawn(ecomsrv, rec_com, [])).
 
 send_com(Box, Com, Args, Rec_Node) ->
     {rec_com, Rec_Node} ! {Box, Com, Args, self()},
@@ -48,3 +54,23 @@ send_com(Box, Com) ->
 			io:format("~n box: ~p - com: ~p - Didn't receive message back from server after 1 second...! ~n",[Box,Com]),
 			{Box,Com,"command not processed after 1 second...!"}
     end.
+
+rec_com() ->
+    receive
+        finished ->
+            io:format("finished~n", []);
+        {Msg, _Msg_PID} ->
+			Msgb= list_to_binary(Msg),
+			Pid=rpc:call(?NODE_AT_HOST, erlang,whereis,[ywebs]),
+			case Pid of
+				undefined ->
+					[];
+				_ ->
+					yaws_api:websocket_send(Pid,{text,Msgb})
+			end,
+            rec_com();
+		Any ->
+			io:format("~n Any: ~p ~n",[Any]),
+			rec_com()
+    end.
+
