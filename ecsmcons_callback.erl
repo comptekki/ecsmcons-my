@@ -41,7 +41,7 @@ handle_message({text, <<"client-connected">>}) ->
         false ->
             register(ywebs,self())
     end,
-    io:format("basic echo handler got ~p pid: ~p~n", ["client-connected",self()]),
+    io:format("basic echo handler got ~p~n", ["client-connected"]),
     {reply, {text, <<<<"client-connected">>/binary>>}};
 
 handle_message({text, <<"close">>}) ->
