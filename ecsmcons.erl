@@ -26,89 +26,15 @@
 %% POSSIBILITY OF SUCH DAMAGE.
 %% 
 %%
-
 -module(ecsmcons).
--behavior(application).
--export([app_start/0, a/0, s/0, start/2, stop/1]).
 
+-export([out/1]).
+
+-include("/usr/local/lib/yaws/include/yaws_api.hrl").
 -include("ecsmcons.hrl").
 
 -define(APPS, ["","any.cmd","any.exe","any.msi","any.msp","any.reg","ecom.beam","NiniteOne.exe","ninite.cmd"]).
 -define(COMS, ["","anycmd","listupfls","mkuploads","ninite","ninitecmd","ninitelog","wuinstall"]).
-
-
-app_start() ->
-	application:start(ecsmcons).
-
-a() ->
-	start0(8080).
-s() ->
-	start_https(8443).
-
-%% start misultin http server
-start0(Port) when is_integer(Port) ->
-	start1(Port);
-start0([Port]) ->
-	PortInt=list_to_integer(Port),
-	start1(PortInt).
-
-start1(_Port) ->
-	[].
-
-start(_Type,[Port]) ->
-	case port_type(Port) of
-		http ->
-			start_http(Port);
-		https ->
-			start_https(Port)
-	end.
-
-%% does port contain 443?
-port_type(Port) ->
-	case string:str(integer_to_list(Port),"443")>0 of
-		true ->
-			https;
-		_ ->
-			http
-	end.
-
-%%
-
-start_http(Port) ->
-	misultin:start_link([
-					 {port, Port},
-					 {static, ?STATIC},
-					 {loop, fun(Req) -> handle_http(Req, Port) end},
-					 {ws_loop, fun(Ws) -> handle_websocket(Ws) end}
-	]).
-
-%%
-
-start_https(Port) ->
-	{ok, [{CertPasswd},_,_,_,_]}=file:consult(?CONF),
-	misultin:start_link(
-	  [
-	   {port, Port},
-	   {static, ?STATIC},
-	   {loop, fun(Req) -> handle_http(Req, Port) end},
-	   {ws_loop, fun(Ws) -> handle_websocket(Ws) end},
-	   {ssl,
-		[
-		 {certfile, ?CERTFILE},
-		 {keyfile, ?KEYFILE},
-		 {password, CertPasswd}
-		]}
-	  ]).
-
-%% stop misultin
-stop(_State) ->
-	misultin:stop().
-
-%%
-
-handle_http(Req, Port) ->
-	% dispatch to rest
-	handle(Req:get(method), Req:resource([lowercase, urldecode]), Req, Port).
 
 %%
 
@@ -190,12 +116,9 @@ checkCreds([],_Uarg,_Parg,_Req) ->
 
 %%
 
-handle('GET', ["favicon.ico"], Req, _Port) ->	
-	Req:file(?FAVICON);
-
-handle('GET', ["logout"], Req, _Port) ->
-	Req:delete_cookie("ecsmcons_logged_in"),	
-	Req:respond(302, [{'Location', "/login"}], "");
+%handle('GET', ["logout"], Req, _Port) ->
+%	Req:delete_cookie("ecsmcons_logged_in"),	
+%	Req:respond(302, [{'Location', "/login"}], "");
 
 handle('GET', ["login"], Req, _Port) ->	
 	case fireWall(Req) of
@@ -240,39 +163,37 @@ $('#uname').focus();
             end;
         deny ->
             fwDenyMessage(Req)
-    end;
+    end.
 
-% callback on request received
-handle('GET', [], Req, Port) ->	
-	handleMain(Req,Port);
-handle('POST', [], Req, Port) ->	
-	handleMain(Req,Port).
+out(_A) ->
+	Port=8080,
 
-handleMain(Req,Port) ->
-	case fireWall(Req) of
+	case allow of
+%	case fireWall(Req) of
 		allow ->
-			Creds=login(),
-			case is_list(Creds) of
-				true ->
-					case checkCreds(Creds,Req) of
-						pass -> NextPage=slash;
-						fail -> NextPage=login
-					end;
-				false -> 
-					case Creds of
-						off -> 
-							NextPage=slash;
-						on  ->
-							NextPage="",
-							Req:respond(302, [{'Location', "/login"}], "")
-				    end
-			end,
+%			Creds=login(),
+%			case is_list(Creds) of
+%				true ->
+%					case checkCreds(Creds,Req) of
+%						pass -> NextPage=slash;
+%						fail -> NextPage=login
+%					end;
+%				false -> 
+%					case Creds of
+%						off -> 
+%							NextPage=slash;
+%						on  ->
+%							NextPage="",
+%							Req:respond(302, [{'Location', "/login"}], "")
+%				    end
+%			end,
+		NextPage=slash,
 			case NextPage of
 				slash ->
     Get_rms=get_rms_keys(?ROOMS,49),
 	{ok, [_,_,_,_,{Ref_cons_time}]}=file:consult(?CONF),
-	Req:ok([{"Content-Type", "text/html"}],
-
+%	Req:ok([{"Content-Type", "text/html"}],
+{content, "text/html",
 ["<html>
 <head> 
 <title>ECSMCons</title> 
@@ -292,9 +213,9 @@ if (!window.WebSocket){
 	var socket;
 	var port='", erlang:integer_to_list(Port), "';
     if(port.indexOf('443')>0)
-	  var host='wss://localhost:'+port+'/service';
+	  var host='wss://localhost:'+port+'/ecsmcons_ws';
     else
-	  var host='ws://localhost:'+port+'/service';
+	  var host='ws://localhost:'+port+'/ecsmcons_ws';
 	var r=false;
 	var rall=false;
 	var first=true;
@@ -312,7 +233,7 @@ if (!window.WebSocket){
 
 		socket.onopen = function(){
 			console.log('onopen called');
-//			send('client-connected');
+			send('client-connected');
 			message(true, socket.readyState);
 
 ",
@@ -425,8 +346,8 @@ init2(?ROOMS,Ref_cons_time),
 		}
 
 		socket.onclose = function(){
-			console.log('onclose called');
-			message(true,socket.readyState);
+			console.log('onclose called')
+		    message(true,'Socket status: 3 (Closed)');
 		}
 
 		socket.onerror = function(e){
@@ -488,8 +409,7 @@ init2(?ROOMS,Ref_cons_time),
 	}
 
 	$('#disconnect').click(function(){
-		socket.close();
-		//message('Socket status: 3 (Closed)')
+        send('close')
 	});
 
 ",
@@ -636,12 +556,12 @@ switcher(?ROOMS),
  </body> 
  </html>
  "
- ]);
+ ]};
 				 login ->
-					 Req:ok([{"Content-Type", "text/html"}],["<meta HTTP-EQUIV='REFRESH' content='0; url=/login'>"])
+                    {content, "text/html",["<meta HTTP-EQUIV='REFRESH' content='0; url=/login'>"]}
 			 end;
 	 deny ->
-		 fwDenyMessage(Req)
+		 [] %fwDenyMessage(Req)
  end. % end handle_http()
 
  %%
@@ -1551,117 +1471,3 @@ jsrefcons_row([{Wk,_FQDN,_MacAddr,_Os}|Wks],Rm) ->
 	end;
 jsrefcons_row([],_Rm) ->
 	[].
-
-% callback on received websockets data
-
-handle_websocket(Ws) ->
-	case lists:member(hanwebs,registered()) of
-		true -> ok;
-		false ->
-			register(hanwebs,self())
-	end,
-	receive
-		{browser, Data} ->
-			Ldata = string:tokens(Data, ":"),
-			case Ldata of
-				_ ->
-					[Box,Com,Args]=Ldata,
-					case Com of
-						"com" ->
-							Res=ecomsrv:send_com(Box, Com,Args,list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done com: ~p - args: ~p~n",[Box,Args]);
-						"loggedon" ->
-							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done loggedon ~p - data2: ~p ~n",[Box, Data2]);
-						"copy" ->
-							case file:read_file(?UPLOADS++Args) of
-								{ok, DataBin} ->
-									Res=ecomsrv:send_com(Box,Com,{Args,DataBin},list_to_atom(?NODE_NAME++Box)),
-									Data2=recData(Res),
-									io:format("~n done copy - ~p ~n",[Box]);
-								{error, Reason} ->
-									Data2=Box++":copy error-"++atom_to_list(Reason),
-									io:format("~n done copy - ~p - error: ~p~n",[Box, Reason])
-							end;
-						"dffreeze" ->
-							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done dffreeze ~p - data2: ~p ~n",[Box, Data2]);
-						"dfthaw" ->
-							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done dfthaw ~p - data2: ~p ~n",[Box, Data2]);
-						"dfstatus" ->
-							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done dfstatus ~p - data2: ~p ~n",[Box, Data2]);
-						"net_restart" ->
-							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done net_restart ~p - data2: ~p ~n",[Box, Data2]);
-						"net_stop" ->
-							Res=ecomsrv:send_com(Box, Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done net_stop ~p - data2: ~p ~n",[Box, Data2]);
-						"reboot" ->
-							Res=ecomsrv:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done reboot ~p - data2: ~p ~n",[Box, Data2]);
-						"shutdown" ->
-							Res=ecomsrv:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
-							Data2=recData(Res),
-							io:format("~n done shutdown ~p - data2: ~p ~n",[Box, Data2]);
-						"wol" ->
-							MacAddrList=string:tokens(Args,"-"),
-							MacAddr=string:join(MacAddrList,":"),
-							io:format("~n in wol .... args: ~p ~n",[MacAddr]),
-							MacAddrBin= <<<<(list_to_integer(X, 16))>> || X <- string:tokens(MacAddr, ":")>>,
-							io:format("~n macbin: ~p ~n",[MacAddrBin]),
-							MagicPacket= << (dup(<<16#FF>>, 6))/binary, (dup(MacAddrBin, 16))/binary >>,
-							{ok,S} = gen_udp:open(0, [{broadcast, true}]),
-							gen_udp:send(S, ?BROADCAST_ADDR, 9, MagicPacket),
-							gen_udp:close(S),
-							Data2="done wol: "++ Box ++ "....!",
-							io:format("~n done wol - ~p ~n",[Box]);
-						"ping" ->
-							%Res=net_adm:ping(list_to_atom(?NODE_NAME++Box)),
-							Res=ecomsrv:send_com(Box,Com,"",list_to_atom(?NODE_NAME++Box)),
-							%Data2=Box++":"++ atom_to_list(Res),
-							Data2=recData(Res),
-							io:format("~n done ping ~p - data2: ~p ~n",[Box, Data2]);
-						_ ->
-							Data2="unsupported command"
-					end,
-%					io:format("~n sending data2... ~n"),
-					Ws:send(Data2)
-			end,
-%			io:format("~n looping handle_websocket(Ws) - after good call..."),
-			handle_websocket(Ws);
-        {Com, _Pid} ->
-%			io:format("~n Com: ~p - Pid: ~p ~n",[Com, Pid]),
-			Ws:send(Com),
-			handle_websocket(Ws);
-		_Ignore ->
-%			io:format("~n looping handel_websocket(Ws) - ignore"),
-			Ws:send("ignored...."),
-			handle_websocket(Ws)
-	end.
-
-
-recData(Res) ->
-	case size(Res) of
-		2 ->
-			{Box, Res2}=Res,
-			string:join([Box,Res2],":");  
-		3 ->
-			{Box, Com, Res2}=Res,
-			string:join([Box,Com,Res2],":")  
-	end.
-
-dup(B,Acc) when Acc > 1 ->	
-    B2=dup(B, Acc-1),
-	<< B/binary,  B2/binary >>;
-dup(B,1) ->
-    B.
