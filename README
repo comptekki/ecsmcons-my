@@ -39,8 +39,10 @@ Basic setup
 Prerequisites:
 1. Erlang (on server and client)
 		http://erlang.org
-2. Misultin
-		https://github.com/ostinelli/misultin
+2. YAWS
+	  https://github.com/klacke/yaws
+	  http://yaws.hyber.org/ 
+
 
 
 Client/Server Setup
@@ -64,41 +66,27 @@ Client/Server Setup
 
    c. run these commands from bash shell:
 
-	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin
+	  erl -name node@host -pa /path/to/ecsmcons/ebin -r ecomsrv
 
-	  Then in the erlang vm run:
+	  or put ecsmcons ebin in yaws.conf
 
-	  ecsmcons:a().
+	  ebin_dir = /path/to/ecsmcons
 
-	  This will start misultin on port 8080
-
+   d.
 	  use browser to access http://localhost:8080
 	  
-	  or
-
-	  ecsmcons:s().
-
-	  for SSL.  SSL will be attempted if 443 is in the port number.
-
-	  This will start misultin on port 8443
-
 	  use browser to access https://localhost:8443
 
-	  or
+	  change ports to ports you set up in yaws.conf
 
-	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin
+   e.
 
-	  then in the erlang VM shell:
+	  in yaws.conf set up appmods for ecsmcons
 
-	  application:start(ecsmcons) to run as application
+        appmods = <ecsmcons, ecsmcons>
+        appmods = <ecsmcons_ws, ecsmcons_ws>
 
-	  application:stop(ecsmcons) to stop application
-
-	  or
-
-	  to run on command-line:
-
-	  erl -name node@host -pa /usr/local/src/misultin/ebin -pa /path/to/ecsmcons/ebin -s ecsmcons app_start
+   f. create /usr/local/var/yaws/www/static and copy ecsmcons/static files there or make soft links to the files
 
 2. Windows setup
 
@@ -119,6 +107,7 @@ Versions
 1.7
 
 -Add wuinstall command
+-Move code back to yaws appmod.
 
 1.6
 
