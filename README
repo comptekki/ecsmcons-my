@@ -57,7 +57,7 @@ Client/Server Setup
          (see ecom-example.hrl in repo)
 
 	 iii. create ecsmcons.conf
-         (see ecsmcons.conf in rep)
+         (see ecsmcons-example.conf in repo)
 
    	  iv. compile ecsmcons.erl and ecom.erl, ecomsrv.erl, i.e. erlc ecsmcons.erl and erlc ecom.erl and erlc ecomsrv.erl
 
