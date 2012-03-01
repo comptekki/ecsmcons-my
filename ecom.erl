@@ -81,20 +81,19 @@ process_msg(Box, Com, Args, Msg_PID) ->
 				"ninitecmd" ->
 					os:cmd(?UPLOADS_DIR++"ninite.cmd");
 				"ninite" ->
-					{Year,Month,Day}=date(),
-					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
-					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python /silent /disableshortcuts "++?UPLOADS_DIR++"\\"++Date++"log.txt");
+					Date=get_date(),
+					Msg_PID ! {ok, done, {Box, "ninite date -> ",Date}},		
+					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python  /disableshortcuts /silent "++?UPLOADS_DIR++"\\"++Date++"_log.txt");
 				"ninitelog" ->
-					{Year,Month,Day}=date(),
-					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
+					Date=get_date(),
 					{ok, Log}=file:read_file(?UPLOADS_DIR++"\\"++Date++"log.txt"),
 					Msg_PID ! {ok, done, {Box, "ninitemlog", Log}};		
 				"listupfls" ->
 					Msg_PID ! {ok, done, {Box, "listupfls", list_up_fls()}};		
 				"wuinstall" ->
-					{Year,Month,Day}=date(),
-					Date=lists:flatten(io_lib:format("~p~2..0B~2..0B",[Year,Month,Day])),
-					os:cmd("c:/erl/uploads/wuinstall.exe /install /criteria \"IsInstalled=0 and Type='Software'\" >"++?UPLOADS_DIR++"\\wui-"++Date++"log.txt");
+					Date=get_date(),
+					Msg_PID ! {ok, done, {Box, "wuinstall date -> ",Date}},		
+					os:cmd("c:/erl/uploads/wuinstall.exe /install /criteria \"IsInstalled=0 and Type='Software'\" >"++?UPLOADS_DIR++"\\wui_"++Date++"_log.txt");
 
 				Unsupported -> Unsupported
 			end,
@@ -105,9 +104,9 @@ process_msg(Box, Com, Args, Msg_PID) ->
 			{FileName, Data} = Args,
 			case FileName of
 				"ecom.beam" ->
-									{ok, File} = file:open(?ERL_DIR++FileName, [write]); 
-					      _ ->
-									{ok, File} = file:open(?UPLOADS_DIR++FileName, [write])
+					{ok, File} = file:open(?ERL_DIR++FileName, [write]); 
+				_ ->
+					{ok, File} = file:open(?UPLOADS_DIR++FileName, [write])
 			end,
 			file:write(File,Data), 
 			file:close(File),
@@ -139,6 +138,11 @@ process_msg(Box, Com, Args, Msg_PID) ->
         _ ->
 			Msg_PID ! {ok, "Unknown command: " ++ "'" ++ Com ++ "'"}
     end.
+
+get_date() ->
+	{Year,Month,Day}=date(),
+	{Hour,Min,Sec}=time(),
+	lists:flatten(io_lib:format("~p~2..0B~2..0B_~2..0B~2..0B~2..0B",[Year,Month,Day,Hour,Min,Sec])).
 
 logged_on() ->
 	case file:list_dir(?USERS_DIR) of
