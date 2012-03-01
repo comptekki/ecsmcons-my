@@ -26,6 +26,7 @@
 %% POSSIBILITY OF SUCH DAMAGE.
 %% 
 %%
+
 -module(ecsmcons).
 
 -export([out/1]).
@@ -38,12 +39,10 @@
 
 %%
 
-fireWall(Req) ->
+fireWall(#arg{client_ip_port={PeerAddress,_Port}}) ->
 	{ok, [_,{FireWallOnOff,IPAddresses},_,_,_]}=file:consult(?CONF),
 	case FireWallOnOff of
 		on ->
-			{req,_Socket,_SocketMode,PeerAddress,_PeerPort,_PeerCert,_Connection,
-			    _ContentLength,_Vsn,_Method,_Uri,_Args,_Headers,_Body,_}=Req:raw(),
 			case lists:member(PeerAddress,IPAddresses) of
 				true -> allow;
 				false -> deny
@@ -53,8 +52,8 @@ fireWall(Req) ->
 
 %%
 
-fwDenyMessage(Req) ->
-	Req:ok([{"Content-Type", "text/html"}],
+fwDenyMessage() ->
+{content, "text/html",
 ["<html>
 <head> 
 <title>ECSMCons Login</title>
@@ -66,7 +65,7 @@ body {background-color:black; color:yellow}
 Access Denied!
 </body>
 </html>"
-]).
+]}.
 
 %%
 
@@ -79,54 +78,56 @@ login() ->
 	
 %%
 
-checkCreds(UnamePasswds,Req) ->
-	case Req:get_cookies() of
+checkCreds(UnamePasswds,A) ->
+	H = A#arg.headers,
+	C = H#headers.cookie,
+    case yaws_api:find_cookie_val("ec_logged_in", C) of
 		[] ->
-			case Req:parse_post() of
-				[{"uname",UnameArg},{"passwd",PasswdArg},{"login","Login"}] ->
-					checkCreds(UnamePasswds,UnameArg,PasswdArg,Req);
-				[] -> fail;
-				_ -> fail
+			case ((A#arg.req)#http_request.method) of
+				'POST' ->
+					case yaws_api:parse_post(A) of
+						[{"uname",UnameArg},{"passwd",PasswdArg},{"login","Login"}] ->
+							checkCreds(UnamePasswds,UnameArg,PasswdArg,A);
+						[] -> [fail,""];
+						_ -> [fail,""]
+					end;
+				_ -> [fail,""]
 			end;
-		[{CookieName,CookieValue}]  ->
+		_Cookie ->
+			[Zcookie]=C,
+			[CookieName,CookieValue]=string:tokens(Zcookie,"="),
 			case CookieName of
 				"ec_logged_in" ->
 					case CookieValue of
-						"true" -> pass;
-						_ -> fail
+						"true" -> [pass,""];
+						_ -> [fail,""]
 					end;
-				_ -> fail
+				_ -> [fail,""]
 		   end
 	end.
 
-checkCreds([{Uname,Passwd}|UnamePasswds],Uarg,Parg,Req) ->
+checkCreds([{Uname,Passwd}|UnamePasswds],Uarg,Parg,A) ->
     case Uname of
 		Uarg ->
 			case Passwd of
 				Parg ->
-					{ok, [_,_,_,{MaxAge},_]}=file:consult(?CONF),
-					Req:set_cookie("ec_logged_in", "true", [{max_age, MaxAge}]),
-					pass;
-		           _ -> checkCreds(UnamePasswds,Uarg,Parg,Req)
+					CO=yaws_api:setcookie("ec_logged_in","true","/"),
+					[pass,CO];
+		           _ -> checkCreds(UnamePasswds,Uarg,Parg,A)
 			end;
-		_ ->  checkCreds(UnamePasswds,Uarg,Parg,Req)
+		_ ->  checkCreds(UnamePasswds,Uarg,Parg,A)
 	end;
-checkCreds([],_Uarg,_Parg,_Req) ->
-	fail.
+checkCreds([],_Uarg,_Parg,_A) ->
+	[fail,""].
 
 %%
 
-%handle('GET', ["logout"], Req, _Port) ->
-%	Req:delete_cookie("ecsmcons_logged_in"),	
-%	Req:respond(302, [{'Location', "/login"}], "");
-
-handle('GET', ["login"], Req, _Port) ->	
-	case fireWall(Req) of
+ec_login(A) ->	
+	case fireWall(A) of
 		allow ->
 			case is_list(login()) of
 				true ->
-	Req:ok([{"Content-Type", "text/html"}],
-
+{content, "text/html",
 ["<html>
 <head> 
 <title>ECSMCons Login</title>
@@ -141,7 +142,7 @@ $('#uname').focus();
 </script>
 </head>
 <body>
-<form action='/' method='post'>
+<form action='/ecsmcons' method='post'>
 <div>
   <h3>Erlang Computer Management Console Login</h3>
 </div>
@@ -157,44 +158,65 @@ $('#uname').focus();
 </form>
 </body>
 </html>" 
-]);
+]};
                 false ->
-	                Req:respond(302, [{'Location', "/"}], "")
-            end;
-        deny ->
-            fwDenyMessage(Req)
-    end.
-
-out(_A) ->
-	Port=8080,
-
-	case allow of
-%	case fireWall(Req) of
-		allow ->
-%			Creds=login(),
-%			case is_list(Creds) of
-%				true ->
-%					case checkCreds(Creds,Req) of
-%						pass -> NextPage=slash;
-%						fail -> NextPage=login
-%					end;
-%				false -> 
-%					case Creds of
-%						off -> 
-%							NextPage=slash;
-%						on  ->
-%							NextPage="",
-%							Req:respond(302, [{'Location', "/login"}], "")
-%				    end
-%			end,
-		NextPage=slash,
-			case NextPage of
-				slash ->
-    Get_rms=get_rms_keys(?ROOMS,49),
-	{ok, [_,_,_,_,{Ref_cons_time}]}=file:consult(?CONF),
-%	Req:ok([{"Content-Type", "text/html"}],
 {content, "text/html",
 ["<html>
+<head> 
+<title>ECSMCons Login</title>
+</head>
+<body>
+hi
+</body>
+</html>"
+]}	                
+            end;
+        deny ->
+            fwDenyMessage()
+    end.
+
+out(A) ->
+	case fireWall(A) of
+		allow ->
+			P = A#arg.pathinfo,
+			case P =:= "/logout" of
+				true ->
+					[{redirect, "/ecsmcons"},yaws_api:setcookie("ec_logged_in","","/")];
+%					[ec_login(A),yaws_api:setcookie("ec_logged_in","","/")];
+				false ->
+					Creds=login(),
+					case is_list(Creds) of
+						true ->
+							[Cred,CO]=checkCreds(Creds,A),
+							case Cred of
+								fail ->
+									[ec_login(A),CO];
+								pass ->
+									[main_page(),CO]
+							end;
+						false -> 
+							case Creds of
+								off ->
+									main_page();
+								_  ->
+									ec_login(A)
+							end
+					end
+			end;
+		deny ->
+			fwDenyMessage()
+	end. % out()
+
+%
+
+main_page() ->
+	Port=8080,
+	Get_rms=get_rms_keys(?ROOMS,49),
+	{ok, [_,_,_,_,{Ref_cons_time}]}=file:consult(?CONF),
+
+	{content, "text/html",[
+%{html,
+"<html>
 <head> 
 <title>ECSMCons</title> 
 <link href='/static/ecsmcons.css' media='screen' rel='stylesheet' type='text/css' />
@@ -489,7 +511,7 @@ switcher(?ROOMS),
 
  <div id='tcoms'>",
  case is_list(login()) of
-	 true -> "<a href='logout' id='logout' class='button' />Logout</a><br>";
+	 true -> "<a href='ecsmcons/logout' id='logout' class='button' />Logout</a><br>";
 	 false -> ""
  end,
  "
@@ -556,13 +578,8 @@ switcher(?ROOMS),
  </body> 
  </html>
  "
- ]};
-				 login ->
-                    {content, "text/html",["<meta HTTP-EQUIV='REFRESH' content='0; url=/login'>"]}
-			 end;
-	 deny ->
-		 [] %fwDenyMessage(Req)
- end. % end handle_http()
+ ]
+}. % main_page()
 
  %%
 
