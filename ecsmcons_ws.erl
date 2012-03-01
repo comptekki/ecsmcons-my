@@ -33,7 +33,7 @@
 
 -include("/usr/local/lib/yaws/include/yaws_api.hrl").
 
-out(A) ->
+out(_A) ->
 	CallbackMod = ecsmcons_callback,
 	Opts = [], %[{origin, "http://" ++ (A#arg.headers)#headers.host}],
 	{websocket, CallbackMod, Opts}.
