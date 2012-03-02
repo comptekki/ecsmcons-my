@@ -14,6 +14,8 @@
    [{"room2-04","fqdn","00-00-00-00-00-00"},{".","","",""},{"room2-05","fqdn","00-00-00-00-00-00,""}]
  ],
 ]).
+-define(APPS, ["","any.cmd","any.exe","any.msi","any.msp","any.reg","ecom.beam","NiniteOne.exe","ninite.cmd"]).
+-define(COMS, ["","anycmd","listupfls","mkuploads","ninite","ninitecmd","ninitelog","wuinstall"]).
 -define(FAVICON,"/path/to/ecsmcons/favicon.ico").
 -define(CERTFILE,"/path/to/cert.pem").
 -define(KEYFILE,"/path/to/key.pem").
