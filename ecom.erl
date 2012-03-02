@@ -85,9 +85,13 @@ process_msg(Box, Com, Args, Msg_PID) ->
 					Msg_PID ! {ok, done, {Box, "ninite date -> ",Date}},		
 					os:cmd("c:/erl/uploads/NiniteOne.exe /updateonly /exclude Python  /disableshortcuts /silent "++?UPLOADS_DIR++"\\"++Date++"_log.txt");
 				"ninitelog" ->
-					Date=get_date(),
-					{ok, Log}=file:read_file(?UPLOADS_DIR++"\\"++Date++"log.txt"),
-					Msg_PID ! {ok, done, {Box, "ninitemlog", Log}};		
+					{ok,Files}=file:list_dir(?UPLOADS_DIR),
+					Log=get_files(Files),
+					case length(Log) of
+						0 -> [];
+						_ -> Msg_PID ! {ok, done, {Box, "ninitemlog ", Log}}
+					end,
+					Msg_PID ! {ok, done, {Box, "ninitemlog", Files}};
 				"listupfls" ->
 					Msg_PID ! {ok, done, {Box, "listupfls", list_up_fls()}};		
 				"wuinstall" ->
@@ -138,6 +142,16 @@ process_msg(Box, Com, Args, Msg_PID) ->
         _ ->
 			Msg_PID ! {ok, "Unknown command: " ++ "'" ++ Com ++ "'"}
     end.
+
+get_files([File|Rest]) ->
+	case string:str(File,"log")>0 of
+		true ->
+			{ok,Log}=file:read_file(?UPLOADS_DIR++"\\"++File),
+			binary_to_list(Log);
+		_ -> get_files(Rest)
+	end;
+get_files([]) -> [].
+
 
 get_date() ->
 	{Year,Month,Day}=date(),
