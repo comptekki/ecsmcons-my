@@ -34,9 +34,6 @@
 -include("/usr/local/lib/yaws/include/yaws_api.hrl").
 -include("ecsmcons.hrl").
 
--define(APPS, ["","any.cmd","any.exe","any.msi","any.msp","any.reg","ecom.beam","NiniteOne.exe","ninite.cmd"]).
--define(COMS, ["","anycmd","listupfls","mkuploads","ninite","ninitecmd","ninitelog","wuinstall"]).
-
 %%
 
 fireWall(#arg{client_ip_port={PeerAddress,_Port}}) ->
