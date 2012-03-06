@@ -189,12 +189,12 @@ out(A) ->
 								fail ->
 									[ec_login(A),CO];
 								pass ->
-									[main_page(),CO]
+									[main_page(A),CO]
 							end;
 						false -> 
 							case Creds of
 								off ->
-									main_page();
+									main_page(A);
 								_  ->
 									ec_login(A)
 							end
@@ -206,13 +206,12 @@ out(A) ->
 
 %
 
-main_page() ->
-	Port=8080,
+main_page(A) ->
+	[Host,Port] = string:tokens((A#arg.headers)#headers.host,":"),
 	Get_rms=get_rms_keys(?ROOMS,49),
 	{ok, [_,_,_,_,{Ref_cons_time}]}=file:consult(?CONF),
 
 	{content, "text/html",[
-%{html,
 "<html>
 <head> 
 <title>ECSMCons</title> 
@@ -230,11 +229,11 @@ if (!window.WebSocket){
 // websocket code from: http://net.tutsplus.com/tutorials/javascript-ajax/start-using-html5-websockets-today/
 
 	var socket;
-	var port='", erlang:integer_to_list(Port), "';
+	var port='"++Port++"'
     if(port.indexOf('443')>0)
-	  var host='wss://localhost:'+port+'/ecsmcons_ws';
+	  var host='wss://"++Host++":'+port+'/ecsmcons_ws';
     else
-	  var host='ws://localhost:'+port+'/ecsmcons_ws';
+	  var host='ws://"++Host++":'+port+'/ecsmcons_ws';
 	var r=false;
 	var rall=false;
 	var first=true;
