@@ -208,12 +208,18 @@ out(A) ->
 
 main_page(A) ->
 %	io:format("~n A: ~p ~n",[A]),
-%	io:format("~n clisock: ~p size: ~p~n",[A#arg.clisock,size(A#arg.clisock)]),
+	io:format("~n clisock: ~p ~n",[A#arg.clisock]),
 %	io:format("~n headers: ~p ~n",[A#arg.headers]),
 	case string:tokens((A#arg.headers)#headers.host,":") of
-		[Host] -> Port="80";
+		[Host] -> 
+			Port=
+				case is_tuple(A#arg.clisock) of
+					true -> "80";
+					_ -> "80"
+				end;
 		[Host,Port] -> []
 	end,
+	io:format("~n host: ~p port: ~p~n",[Host,Port]),
 	Get_rms=get_rms_keys(?ROOMS,49),
 	{ok, [_,_,_,_,{Ref_cons_time}]}=file:consult(?CONF),
 
@@ -235,11 +241,15 @@ if (!window.WebSocket){
 // websocket code from: http://net.tutsplus.com/tutorials/javascript-ajax/start-using-html5-websockets-today/
 
 	var socket;
-	var port='"++Port++"'
+	var port='"++Port++"';
     if(port.indexOf('443')>0)
-	  var host='wss://"++Host++":'+port+'/ecsmcons_ws';
+	  if (port.length>3)
+		   var host='wss://"++Host++":'+port+'/ecsmcons_ws';
+	  else
+		 var host='wss://"++Host++"/ecsmcons_ws';
     else
-	  var host='ws://"++Host++":'+port+'/ecsmcons_ws';
+		 var host='ws://"++Host++":'+port+'/ecsmcons_ws';
+alert(host);
 	var r=false;
 	var rall=false;
 	var first=true;
@@ -247,14 +257,14 @@ if (!window.WebSocket){
 
 	try{
 		if (window.chrome)
-//		   var socket = new WebSocket(host)
-		  var socket = new WebSocket(host, 'binary');
+		   var socket = new WebSocket(host)
+//		  var socket = new WebSocket(host, 'binary');
 		//	var socket = new WebSocket(host, 'base64')  // chrome 14+
 		else
-	   		var socket = new WebSocket(host)  // safari, chrome 13
+//	   		var socket = new WebSocket(host)  // safari, chrome 13
 
-		//  var socket = new WebSocket(host, 'binary');
-
+//		  var socket = new WebSocket(host, 'binary');
+	var socket = new WebSocket(host, 'base64')
 		message(true, socket.readyState);
 
 		socket.onopen = function(){
