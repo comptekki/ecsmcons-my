@@ -207,7 +207,13 @@ out(A) ->
 %
 
 main_page(A) ->
-	[Host,Port] = string:tokens((A#arg.headers)#headers.host,":"),
+%	io:format("~n A: ~p ~n",[A]),
+%	io:format("~n clisock: ~p size: ~p~n",[A#arg.clisock,size(A#arg.clisock)]),
+%	io:format("~n headers: ~p ~n",[A#arg.headers]),
+	case string:tokens((A#arg.headers)#headers.host,":") of
+		[Host] -> Port="80";
+		[Host,Port] -> []
+	end,
 	Get_rms=get_rms_keys(?ROOMS,49),
 	{ok, [_,_,_,_,{Ref_cons_time}]}=file:consult(?CONF),
 
@@ -241,7 +247,9 @@ if (!window.WebSocket){
 
 	try{
 		if (window.chrome)
-			var socket = new WebSocket(host, 'base64')  // chrome 14+
+//		   var socket = new WebSocket(host)
+		  var socket = new WebSocket(host, 'binary');
+		//	var socket = new WebSocket(host, 'base64')  // chrome 14+
 		else
 	   		var socket = new WebSocket(host)  // safari, chrome 13
 
