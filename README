@@ -106,7 +106,8 @@ Versions
 --------
 1.8
 
--
+-Fix Stop Win Service All
+-Tweak websocket port in Erlang/JS code
 
 1.7
 
