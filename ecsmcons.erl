@@ -249,7 +249,7 @@ if (!window.WebSocket){
 		 var host='wss://"++Host++"/ecsmcons_ws';
     else
 		 var host='ws://"++Host++":'+port+'/ecsmcons_ws';
-alert(host);
+//alert(host);
 	var r=false;
 	var rall=false;
 	var first=true;
@@ -540,7 +540,7 @@ switcher(?ROOMS),
 				 {"dffreeze","DeepFreeze Freeze All"},
 				 {"dfstatus","DeepFreeze Status All"},
 				 {"net_restart","Restart Win Service All"},
-				 {"net_restart","Stop Win Service All"},
+				 {"net_stop","Stop Win Service All"},
 				 {"loggedon","Logged On All"}
 				]),
  "
